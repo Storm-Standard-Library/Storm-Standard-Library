@@ -62,7 +62,7 @@ Feel free to socialize and daydream in our [discord](https://discord.gg/2GMG4Jt5
 ## Closing notes
 
 ### License
-This project is licensed under the [GNU General Public License v3.0](LICENSE.md). You are free to modify, distribute, and use the software under the terms of this license.
+This project is licensed under the [GNU General Public License v3.0](LICENSE). You are free to modify, distribute, and use the software under the terms of this license.
 
 ### Project Status
 
