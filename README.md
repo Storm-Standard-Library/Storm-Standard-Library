@@ -1,31 +1,28 @@
 # Storm Standard Library
 
-The **Storm** standard library aims to unify and streamline the way Lua scripts are written for Stormworks by offering a broad set of functions covering most common tasks, and by introducing standards. Developed together with recognizable personas from Stormworks Official's \#lua channel.
+The **Storm Standard Library** is designed to unify and streamline Lua scripting for Stormworks, by providing a comprehensive set of functions for common tasks, and by establishing clear standards. Created by and with input from experienced Lua developers.
 
-The Library aims to be a framework, providing general purpose utilities as well as canvas, state machines, case, logic and control schemes, packaged in the best possible balance between performance and compact char count.
+The library's primary function is providing general purpose un-opinionated utilities, but it should not shy away from more general functionality, such as state machines, case, logic, canvas, and control schemes, all packaged in the best possible balance between performance and compact char count.
 
 The goal is to set standards and be the baseline other libraries will follow in syntax, and to set solid grounds to start new projects from.
 
 ---
 
 ## Features
-**Zero-cost availability**
-Usage of advanced LifeboatAPI redundancy-remover @sections allow aggressive minifying. Having this library available but unused should not cost a single minified char. Using just a few functions should be very cheap in terms of chars after minifying.
-
-**Compactness**
-When char count is a bigger concern, functions marked with "S" for "Small" may be provided to allow further minimizing the size of built projects.
+**Zero-cost presence**
+Usage of advanced LifeboatAPI redundancy-remover sections allows aggressive minifying. You shouldn't pay in chars for anything in the library that you don't use. That means if you import but don't use the library, it shouldn't cost you a single char.
 
 **Performance**
-A set of quick functions (marked with "Q") is to be provided to let performance heavy projects proceed.
+All functions are to be reasonably optimized, but for the times when it is desireable to trade character count for execution speed, alternative functions (marked with 'Q' for 'Quick') may be provided.
+
+**Compactness**
+All functions are to be implemented with reasonably few characters, but as with performance, an extra set (marked with 'S' for 'Small') that trades speed for characters may be provided.
 
 **Usability**
-Being designed with input from a plethora of Lua-powerusers, the library is to be nice to use for a wide range of users.
-
-**Versatility**
-For complex tasks, multiple approaches (space-efficient, compute-efficient, general-purpose) may be present, clearly marked for easy selection.
+Being designed with input from a plethora of experienced Lua-coders, the library should respect usability for a broad, capable audience.
 
 **Standardization**
-Consistent naming conventions and documentation together with a set syntax to set standards with the aim of making code more readable.
+Consistent naming conventions, documentation, testing, and syntax, sets standards with the aim of improving code quality.
 
 ---
 
@@ -48,7 +45,7 @@ Consistent naming conventions and documentation together with a set syntax to se
 
 ## Contributing
 
-We welcome community contributions under the guidelines of the GNU GPLv3 license. Currently, the founding team consists of only two members, but many well-known personas have shown interest in joining the quest, and we hope many contributors take interest in this ambitious project. As such, the homepage may change rapidly in the first days from launch.
+Community contributions are very welcome under the guidelines of the GNU GPLv3 license. Currently, the founding team consists of only two members, but many well-known personas have shown interest, and we hope many contributors take interest in this ambitious project. As such, it may change rapidly in the first period from launch.
 
 If you would like to contribute:
 
@@ -72,17 +69,10 @@ This project is licensed under the [GNU General Public License v3.0](LICENSE.md)
 - Alpha, `0.0.0`
 - Actively in initial development and design phases.
 
-### Roadmap
-
-- nil
-- nada
-- null
-- none
-
 ### Changelog
 
 [You can view our progress by clicking here](CHANGELOG.md)
 
 ---
 
-*Thank you for checking out the Storm Standard Library! We look forward to your contributions and feedback.*
+*Thank you for checking out the Storm Standard Library, we look forward to your contributions and feedback.*
