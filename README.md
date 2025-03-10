@@ -35,7 +35,7 @@ Consistent naming conventions, documentation, testing, and syntax, sets standard
 	```lua
 	require("StormSL")
 	```
-5. Once required, you can utilize the various modules. For example: *(be aware that exact syntax is undecided)*
+5. Once required, you can utilize the various modules. For example: *(exact syntax is undecided as of writing)*
 	```lua
 	-- Clamps a number from 0 to 255 using the clamp utility
 	local clampedValue = StormSL.SLclamp(input.getNumber(1), 0, 255)
@@ -47,15 +47,32 @@ Consistent naming conventions, documentation, testing, and syntax, sets standard
 
 Community contributions are very welcome under the guidelines of the GNU GPLv3 license. Currently, the founding team consists of only two members, but many well-known personas have shown interest, and we hope many contributors take interest in this ambitious project. As such, it may change rapidly in the first period from launch.
 
-If you would like to contribute:
+If you have notice anything that you believe is a bug, please make us aware by creating an issue using the "Bug report" issue template.
+
+If you would like to see a change implemented, or feature added, please make an issue using the "Feature request" template.
+
+If you yourself would like to contribute:
 
 1. **Fork** this repository.
-2. Create a **feature branch** from `main`.
-3. **Commit** your changes with clear, concise messages.
-4. **Open a Pull Request**, linking to any relevant issues.
+2. Create a **feature branch** from `dev`.
+3. Roughly follow the coding style you see in the rest of the project, and **Commit** your changes with clear, concise messages.
+4. Open a **Pull Request**, and if applicable, **link** to relevant issues.
 
-We welcome feature requests, bug reports or notes about our project in GitHub Issues and Discussions, where most of our coordination is to take place.
-Feel free to socialize and daydream in our [discord](https://discord.gg/2GMG4Jt5ds)
+See **Repository structure** below. We welcome feature requests, bug reports or notes about our project in GitHub Issues and Discussions, where most of our coordination is to take place.
+Feel free to socialize and daydream in our [**discord**](https://discord.gg/2GMG4Jt5ds)
+If you have any questions, feel free to ask in GitHub Discussions or in the discord!
+
+---
+
+## Repository structure
+
+The repository is to be structured as follows:
+- `main` branch. Holds stable and test-passing, usable versions. Commits and merges into `main` should require review.
+- `dev` branch. May not always be fully usable or test-passing. Work of small scope can be done here when appropriate, but entire additions or changes should be done in feature/change-branches. It should be merged into `main` when it makes sense to, e.g. when a new set of functions and their tests are done. Commits and merges into `dev` should require review.
+- `feature/change` branches. These are where the brunt of changes and additions should be performed. They are to be created as needed, and merged into `dev` once their purpose is fulfilled, after which they can be destroyed. Commits and merges into these branches should not require review.
+
+Shoddy paint illustration below:
+![[Pasted image 20250310174632.png]]
 
 ---
 
