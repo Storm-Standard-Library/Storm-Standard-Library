@@ -38,7 +38,7 @@ Consistent naming conventions, documentation, testing, and syntax, sets standard
 5. Once required, you can utilize the various modules. For example: *(exact syntax is undecided as of writing)*
 	```lua
 	-- Clamps a number from 0 to 255 using the clamp utility
-	local clampedValue = StormSL.SLclamp(input.getNumber(1), 0, 255)
+	local clampedValue = StormSL.clamp_SL(0, 255, input.getNumber(1))
 	```
 
 ---
@@ -47,7 +47,7 @@ Consistent naming conventions, documentation, testing, and syntax, sets standard
 
 Community contributions are very welcome under the guidelines of the GNU GPLv3 license. Currently, the founding team consists of only two members, but many well-known personas have shown interest, and we hope many contributors take interest in this ambitious project. As such, it may change rapidly in the first period from launch.
 
-If you have notice anything that you believe is a bug, please make us aware by creating an issue using the "Bug report" issue template.
+If you have noticed anything that you believe is a bug, please make us aware by creating an issue using the "Bug report" issue template.
 
 If you would like to see a change implemented, or feature added, please make an issue using the "Feature request" template.
 
@@ -59,7 +59,7 @@ If you yourself would like to contribute:
 4. Open a **Pull Request**, and if applicable, **link** to relevant issues.
 
 See **Repository structure** below. We welcome feature requests, bug reports or notes about our project in GitHub Issues and Discussions, where most of our coordination is to take place.
-Feel free to socialize and daydream in our [**discord**](https://discord.gg/2GMG4Jt5ds)
+Feel free to socialize and daydream in our [**discord**](https://discord.gg/2GMG4Jt5ds).
 If you have any questions, feel free to ask in GitHub Discussions or in the discord!
 
 ---
