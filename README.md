@@ -72,7 +72,7 @@ The repository is to be structured as follows:
 - `feature/change` branches. These are where the brunt of changes and additions should be performed. They are to be created as needed, and merged into `dev` once their purpose is fulfilled, after which they can be destroyed. Commits and merges into these branches should not require review.
 
 Shoddy paint illustration below:
-![[Pasted image 20250310174632.png]]
+![image](/Images/repo.png)
 
 ---
 
