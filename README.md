@@ -58,6 +58,8 @@ If you yourself would like to contribute:
 3. Roughly follow the coding style you see in the rest of the project, and **Commit** your changes with clear, concise messages.
 4. Open a **Pull Request**, and if applicable, **link** to relevant issues.
 
+People that intend to work on the library can be added as members to get permission to create and work on branches from `dev`.
+
 See **Repository structure** below. We welcome feature requests, bug reports or notes about our project in GitHub Issues and Discussions, where most of our coordination is to take place.
 Feel free to socialize and daydream in our [**discord**](https://discord.gg/2GMG4Jt5ds).
 If you have any questions, feel free to ask in GitHub Discussions or in the discord!
@@ -70,6 +72,7 @@ The repository is to be structured as follows:
 - `main` branch. Holds stable and test-passing, usable versions. Commits and merges into `main` should require review.
 - `dev` branch. May not always be fully usable or test-passing. Work of small scope can be done here when appropriate, but entire additions or changes should be done in feature/change-branches. It should be merged into `main` when it makes sense to, e.g. when a new set of functions and their tests are done. Commits and merges into `dev` should require review.
 - `feature/change` branches. These are where the brunt of changes and additions should be performed. They are to be created as needed, and merged into `dev` once their purpose is fulfilled, after which they can be destroyed. Commits and merges into these branches should not require review.
+Repository and protections should be mostly set up, but some things may have to be done as we go.
 
 Shoddy paint illustration below:
 ![image](/Images/repo.png)
