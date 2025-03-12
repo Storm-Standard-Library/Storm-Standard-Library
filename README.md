@@ -72,8 +72,8 @@ The repository is to be structured as follows:
 - `main` branch. Holds stable and test-passing, usable versions. Commits and merges into `main` should require review.
 - `dev` branch. May not always be fully usable or test-passing. Work of small scope can be done here when appropriate, but entire additions or changes should be done in feature/change-branches. It should be merged into `main` when it makes sense to, e.g. when a new set of functions and their tests are done. Commits and merges into `dev` should require review.
 - `feature/change` branches. These are where the brunt of changes and additions should be performed. They are to be created as needed, and merged into `dev` once their purpose is fulfilled, after which they can be destroyed. Commits and merges into these branches should not require review.
-Repository and protections should be mostly set up, but some things may have to be done as we go.
 
+Repository and protections should be mostly set up, but some things may have to be done as we go.
 Shoddy paint illustration below:
 ![image](/Images/repo.png)
 
