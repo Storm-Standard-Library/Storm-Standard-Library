@@ -47,7 +47,7 @@ Consistent naming conventions, documentation, testing, and syntax, sets standard
 
 Community contributions are very welcome under the guidelines of the GNU GPLv3 license. Currently, the founding team consists of only two members, but many well-known personas have shown interest, and we hope many contributors take interest in this ambitious project. As such, it may change rapidly in the first period from launch.
 
-If you have noticed anything that you believe is a bug, please make us aware by creating an issue using the "Bug report" issue template.
+If you notice anything you believe is a bug, please make us aware by creating an issue using the "Bug report" issue template.
 
 If you would like to see a change implemented, or feature added, please make an issue using the "Feature request" template.
 
