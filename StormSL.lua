@@ -2,7 +2,7 @@
 
 ---@section StormSL 1 _STORM_SL_CLASS_
 do	--hides the upvalues so that there's no chance of name conflict for locals below
-	local ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL=ipairs,pairs,table.insert,table.remove,type
+	local ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL=ipairs,pairs,table.insert,table.remove,type,table.unpack
 
 	--it's declared as a global so that it can be accessed from anywhere in the script, always
 
@@ -10,6 +10,10 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field version_SL string
 	---@field clamp_SL fun(minimum:number, maximum:number, value:number):number
 	---@field ewma_SL fun(old:number, new:number, gamma:number):number
+	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
+	---@field threshold_SL fun(x:number, min:number, max:number):boolean
+	---@field CatchNaN_SL fun(x:number):any
+	---@field parseLineCSV_SL fun(line:string):...
 	---@field lerpX_SL fun(x:number, x1:number, y1:number, x2:number, y2:number):number
 	---@field lerpT_SL fun(t:number, t0_value:number, t1_value:number):number
 	---@field simpleCopy_SL fun(tableIn:table, tableOut:table?, allowOverwrite:boolean?):table
@@ -44,6 +48,63 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@return number smoothed
 		ewma_SL = function(old, new, gamma)
 			return ( (gamma-1) * old + new) / gamma
+		end,
+		---@endsection
+
+		---@section ewmaClass_SL
+		---@class EWMA
+		---@field alpha number the smoothing factor of the EWMA, default 0.1
+		---@field value number the current smoothed value of the EWMA
+		---@field update fun(self:EWMA, newValue:number):number updates the value of the EWMA
+		---@param alpha number? the smoothing factor of the EWMA, default 0.1
+		---@param innitialValue number? the initial value of the EWMA, default 0
+		---@return table EWMA object
+		ewmaClass_SL = function (alpha, innitialValue)
+			return {
+				alpha = alpha or 0.1,
+				value = innitialValue or 0,
+				---Updates & runs the EWMA smoothing on the new value.
+				---@param s EWMA self Table
+				---@param newValue number new value to smooth
+				---@return number smoothed Output of the EWMA
+				update = function(s, newValue)
+					s.value = (1 - s.alpha) * s.value + s.alpha * newValue
+					return s.value
+				end
+			}
+		end,
+		---@endsection
+
+		---@section threshold_SL
+		---Checks if the value is between the min and max.
+		---@param x number
+		---@param min number
+		---@param max number
+		---@return boolean
+		threshold_SL = function(x, min, max)
+			return true and x>min and x<max
+		end,
+		---@endsection
+
+		---@section CatchNaN_SL
+		---Checks if the value is NaN.
+		---@param x number value to check
+		---@return any x if x is not NaN, 0 if x is NaN
+		CatchNaN_SL = function(x)
+			return x == x and x or 0
+		end,
+		---@endsection
+
+		---@section parseLineCSV_SL
+		---Parses a line of CSV into a its value's, expects nums only.
+		---@param line string str containing the CSV line (ie "1,2,3,4")
+		---@return ... numbers from the CSV line
+		parseLineCSV_SL = function(line)
+			local outputTable = {}
+			for value in line:gmatch("([^,]+)") do
+				insert_SL(outputTable, tonumber(value))
+			end
+			return unpack_SL(outputTable)
 		end,
 		---@endsection
 
@@ -176,7 +237,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
 	local Vector, Matrix
 	require('StormSL.Vector')
-	require('StormSL.Matrix')
+	require('StormSL.Matrix') --erm wat de StormSL.Matrix, dont exist yet 
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table
