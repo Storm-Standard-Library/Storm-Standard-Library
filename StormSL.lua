@@ -82,7 +82,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param max number
 		---@return boolean
 		threshold_SL = function(x, min, max)
-			return true and x>min and x<max
+			return x>min and x<max
 		end,
 		---@endsection
 
