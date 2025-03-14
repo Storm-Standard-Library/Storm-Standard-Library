@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to make us aware of a bug that's slipped out
 title: ''
 labels: bug
-assignees: JudgementalBird
+assignees: ''
 
 ---
 
