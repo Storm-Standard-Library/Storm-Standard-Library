@@ -57,12 +57,12 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@field value number the current smoothed value of the EWMA
 		---@field update fun(self:EWMA, newValue:number):number updates the value of the EWMA
 		---@param alpha number? the smoothing factor of the EWMA, default 0.1
-		---@param innitialValue number? the initial value of the EWMA, default 0
+		---@param initialValue number? the initial value of the EWMA, default 0
 		---@return table EWMA object
-		ewmaClass_SL = function (alpha, innitialValue)
+		ewmaClass_SL = function (alpha, initialValue)
 			return {
 				alpha = alpha or 0.1,
-				value = innitialValue or 0,
+				value = initialValue or 0,
 				---Updates & runs the EWMA smoothing on the new value.
 				---@param s EWMA self Table
 				---@param newValue number new value to smooth
@@ -72,6 +72,20 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 					return s.value
 				end
 			}
+		end,
+		---@endsection
+		
+		---@section ewmaClosure_SL
+		---@param alpha number? the smoothing factor of the EWMA, default 0.1
+		---@param value number? the INITIAL! value of the EWMA. Default to 0.
+		---@return fun(newValue:number):number run Updates & runs the EWMA smoothing on the new value.
+		ewmaClosure_SL = function (alpha, value)
+			alpha = alpha or 0.1
+			value = value or 0
+			return function(newValue)
+				value = (1 - alpha) * value + alpha * newValue
+				return value
+			end
 		end,
 		---@endsection
 
