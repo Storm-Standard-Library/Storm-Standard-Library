@@ -86,23 +86,23 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
-		---@section CatchNaN_SL
-		---Checks if the value is NaN.
-		---@param x number value to check
-		---@return any x if x is not NaN, 0 if x is NaN
-		CatchNaN_SL = function(x)
+		---@section fixNaN_SL
+		---Replaces NaN with 0.
+		---@param x number value to correct
+		---@return any y Will be x if x isn't NaN, or 0 if it is.
+		fixNaN_SL = function(x)
 			return x == x and x or 0
 		end,
 		---@endsection
-
-		---@section parseLineCSV_SL
-		---Parses a line of CSV into a its value's, expects nums only.
-		---@param line string str containing the CSV line (ie "1,2,3,4")
-		---@return ... numbers from the CSV line
-		parseLineCSV_SL = function(line)
+		
+		---@section csvToList_SL
+		---Produce a list of substrings containing values from provided CSV string, value by value in each record (line).
+		---@param csv string string containing the CSV
+		---@return ... substrings from the CSV
+		csvToList_SL = function(csv)
 			local outputTable = {}
-			for value in line:gmatch("([^,]+)") do
-				insert_SL(outputTable, tonumber(value))
+			for value in csv:gmatch("([^,\n]+)") do
+				insert_SL(outputTable, value)
 			end
 			return unpack_SL(outputTable)
 		end,
@@ -237,7 +237,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
 	local Vector, Matrix
 	require('StormSL.Vector')
-	require('StormSL.Matrix') --erm wat de StormSL.Matrix, dont exist yet 
+	require('StormSL.Matrix') --unimplemented!
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table
