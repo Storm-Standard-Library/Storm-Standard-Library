@@ -103,7 +103,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@section fixNaN_SL
 		---Replaces NaN with an optionally provided value, or defaults it to 0.
 		---@param x number value to correct
-		---@param fixValue number? value to replace NaN with. Defaults to 0
+		---@param fixValue number? number to replace NaN with. Defaults to 0
 		---@return any y Will be x if x isn't NaN, or fixValue if it is (or 0 if one isn't provided).
 		fixNaN_SL = function(x, fixValue)
 			return x == x and x or fixValue or 0
