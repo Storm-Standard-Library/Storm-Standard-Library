@@ -87,24 +87,12 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section fixNaN_SL
-		---Replaces NaN with 0.
+		---Replaces NaN with an optionally provided value, or defaults it to 0.
 		---@param x number value to correct
-		---@return any y Will be x if x isn't NaN, or 0 if it is.
-		fixNaN_SL = function(x)
-			return x == x and x or 0
-		end,
-		---@endsection
-		
-		---@section csvToList_SL
-		---Produce a list of substrings containing values from provided CSV string, value by value in each record (line).
-		---@param csv string string containing the CSV
-		---@return ... substrings from the CSV
-		csvToList_SL = function(csv)
-			local outputTable = {}
-			for value in csv:gmatch("([^,\n]+)") do
-				insert_SL(outputTable, value)
-			end
-			return unpack_SL(outputTable)
+		---@param fixValue number? value to replace NaN with. Defaults to 0
+		---@return any y Will be x if x isn't NaN, or fixValue if it is (or 0 if one isn't provided).
+		fixNaN_SL = function(x, fixValue)
+			return x == x and x or fixValue or 0
 		end,
 		---@endsection
 
