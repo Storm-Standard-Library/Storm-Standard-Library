@@ -25,6 +25,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field lerpT_SL fun(t:number, l:number, h:number):number
 	---@field inverseLerpT_SL fun(v:number, l:number, h:number):number
 	---@field inverseLerpX_SL fun(y:number, x1:number, y1:number, x2:number, y2:number):number
+	---@field remap_SL fun(value:number, x1:number, y1:number, x2:number, y2:number):number
 	---@field simpleCopy_SL fun(tableIn:table, tableOut:table?, allowOverwrite:boolean?):table
 	---@field deepCopy_SL fun(tableIn:table, tableOut:table?):table
 	---@field xorShift64_SL fun(int64:integer):integer
@@ -239,6 +240,19 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@return number x value for y between x1 and x2
 		inverseLerpX_SL = function(y, x1, y1, x2, y2)
 			return (x1*y - x1*y2 - x2*y + x2*y1) / (y1 - y2)
+		end,
+		---@endsection
+
+		---@section remap_SL
+		---Remaps a value from one range to another. linearly interpolates/affinely transforms the value from [x1,y1] to [x2,y2]. Is the same as invlerping then lerping.
+		---@param value number value to remap
+		---@param x1 number start of the input range
+		---@param y1 number end of the input range
+		---@param x2 number start of the output range
+		---@param y2 number end of the output range
+		---@return number transformedValue value remapped from [x1,y1] to [x2,y2] 
+		remap_SL = function(value, x1, y1, x2, y2)
+			return x2 + (value - x1) * (y2 - x2) / (y1 - x1)
 		end,
 		---@endsection
 
