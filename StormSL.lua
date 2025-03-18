@@ -11,9 +11,9 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field clamp_SL fun(minimum:number, maximum:number, value:number):number
 	---@field ewma_SL fun(old:number, new:number, gamma:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
+	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
 	---@field threshold_SL fun(x:number, min:number, max:number):boolean
-	---@field CatchNaN_SL fun(x:number):any
-	---@field parseLineCSV_SL fun(line:string):...
+	---@field fixNaN_SL fun(x:number, fixValue:number):any
 	---@field lerpX_SL fun(x:number, x1:number, y1:number, x2:number, y2:number):number
 	---@field lerpT_SL fun(t:number, t0_value:number, t1_value:number):number
 	---@field simpleCopy_SL fun(tableIn:table, tableOut:table?, allowOverwrite:boolean?):table
