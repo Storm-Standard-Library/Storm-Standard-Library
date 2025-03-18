@@ -13,12 +13,14 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field ewma_SL fun(old:number, new:number, gamma:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
 	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
-	---@field threshold_SL fun(x:number, min:number, max:number):boolean
+	---@field thresholdEx_SL fun(x:number, min:number, max:number):boolean
+	---@field thresholdInc_SL fun(x:number, min:number, max:number):boolean
 	---@field fixNanTo0_SL fun(value:number):number
 	---@field fixNanToAny_SL fun(value:number, fixValue:number):any
 	---@field checkNan_SL fun(value:number):boolean
 	---@field fixInfToAny_SL fun(value:number, fixValue:number):number
 	---@field checkInf_SL fun(value:number):boolean
+	---@field fixNanInfTo0_SL fun(value:number):number
 	---@field lerpX_SL fun(x:number, x1:number, y1:number, x2:number, y2:number):number
 	---@field lerpT_SL fun(t:number, l:number, h:number):number
 	---@field inverseLerpT_SL fun(v:number, l:number, h:number):number
@@ -40,7 +42,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section clamp_SL
-		---a couple chars smaller than clamQ but twice as slow which won't matter in casual usage
+		--- ~9 chars smaller minified than clampQ, but twice as slow, which is completely fine unless it's in a hot loop
 		---@param minimum number
 		---@param maximum number
 		---@param value number
@@ -51,7 +53,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section clamp_SL
-		---a couple chars larger than clampS but twice as fast which won't matter in casual usage
+		---twice as fast as clampS, but ~9 chars larger minified too. Preferable for hot loops
 		---@param minimum number
 		---@param maximum number
 		---@param value number
@@ -112,14 +114,25 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
-		---@section threshold_SL
-		---Checks if the value is between the min and max. Exclusive.
+		---@section thresholdEx_SL
+		---Returns true if x is within the exclusive range from min to max. i.e. min < x < max
 		---@param x number
 		---@param min number
 		---@param max number
 		---@return boolean
-		threshold_SL = function(x, min, max)
-			return x>min and x<max
+		thresholdEx_SL = function(x, min, max)
+			return min<x and x<max
+		end,
+		---@endsection
+		
+		---@section thresholdInc_SL
+		---Returns true if x is on the inclusive range from and including min to and including max. i.e. min ≤ x ≤ max
+		---@param x number
+		---@param min number
+		---@param max number
+		---@return boolean
+		thresholdInc_SL = function(x, min, max)
+			return min<=x and x<=max
 		end,
 		---@endsection
 
@@ -159,7 +172,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param fixValue number
 		---@return number
 		fixInfToAny_SL = function(value, fixValue)
-			if value == 1/0 or value == -1/0 then
+			if math.abs(value)==math.huge then
 				return fixValue
 			end
 			return value
@@ -170,7 +183,16 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param value number
 		---@return boolean
 		checkInf_SL = function(value)
-			return value == 1/0 or value == -1/0
+			return math.abs(value)==math.huge
+		end,
+		---@endsection
+
+		---@section fixNanInfTo0_SL
+		---Replaces NaN and ±inf with a 0.
+		---@param value number value to correct
+		---@return number corrected will be 0 if NaN or ±inf, otherwise the provided value
+		fixNanInfTo0_SL = function(value)
+			return (math.abs(value)==math.huge or value ~= value) and 0 or value
 		end,
 		---@endsection
 
