@@ -161,7 +161,7 @@ Vectors = {
 	---Creates a new 2D vector, if any of the arguments are nil, it will default to 0.
 	---@param x number?
 	---@param y number?
-	---@return table
+	---@return table vector vector
 	newV2_SL = function(x, y)
 		return {
 			x or 0,
@@ -173,7 +173,7 @@ Vectors = {
 	---@param x number?
 	---@param y number?
 	---@param z number?
-	---@return table
+	---@return table vector
 	newV3_SL = function(x, y, z)
 		return {
 			x or 0,
@@ -187,7 +187,7 @@ Vectors = {
 	---@param y number?
 	---@param z number?
 	---@param w number?
-	---@return table
+	---@return table vector
 	newV4_SL = function(x, y, z, w)
 		return {
 			x or 0,
@@ -199,7 +199,7 @@ Vectors = {
 
 	---Creates a new vector of any size.
 	---@param ... number values of the vector, if only one argument is given, it will create a vector of that size filled with 0s
-	---@return table
+	---@return table vector
 	newVA_SL = function(...)
 		local newVector = {...}
 		if #newVector == 1 then
@@ -216,7 +216,7 @@ Vectors = {
 	---Prunes the vector to the given size by deleting it's dimensions.
 	---@param vector table
 	---@param size number
-	---@return table
+	---@return table vector
 	pruneVA_SL=function(vector, size)
 		for i = #vector, size + 1, -1 do
 			remove_SL(vector, i)
@@ -228,7 +228,7 @@ Vectors = {
 	---@param vectorToChange table vector to change
 	---@param x number new x value
 	---@param y number new y value
-	---@return table
+	---@return table vector
 	setV2_SL = function(vectorToChange, x, y)
 		vectorToChange[1] = x
 		vectorToChange[2] = y
@@ -240,7 +240,7 @@ Vectors = {
 	---@param x number new x value
 	---@param y number new y value
 	---@param z number new z value
-	---@return table
+	---@return table vector
 	setV3_SL = function(vectorToChange, x, y, z)
 		vectorToChange[1] = x
 		vectorToChange[2] = y
@@ -254,7 +254,7 @@ Vectors = {
 	---@param y number new y value
 	---@param z number new z value
 	---@param w number new w value
-	---@return table
+	---@return table vector
 	setV4_SL = function(vectorToChange, x, y, z, w)
 		vectorToChange[1] = x
 		vectorToChange[2] = y
@@ -266,7 +266,7 @@ Vectors = {
 	---Sets the values of a vector to the given values.
 	---@param vectorToChange table
 	---@param ... number
-	---@return table
+	---@return table vector
 	setVA_SL = function(vectorToChange, ...)
 		local args = {...}
 		for i = 1, #args do
@@ -279,7 +279,7 @@ Vectors = {
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
-	---@return table
+	---@return table vector
 	setToV2_SL = function(vectorToChange, vectorToCopyFrom)
 		vectorToChange[1] = vectorToCopyFrom[1]
 		vectorToChange[2] = vectorToCopyFrom[2]
@@ -289,7 +289,7 @@ Vectors = {
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
-	---@return table
+	---@return table vector
 	setToV3_SL = function(vectorToChange, vectorToCopyFrom)
 		vectorToChange[1] = vectorToCopyFrom[1]
 		vectorToChange[2] = vectorToCopyFrom[2]
@@ -300,7 +300,7 @@ Vectors = {
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
-	---@return table
+	---@return table vector
 	setToV4_SL = function(vectorToChange, vectorToCopyFrom)
 		vectorToChange[1] = vectorToCopyFrom[1]
 		vectorToChange[2] = vectorToCopyFrom[2]
@@ -312,7 +312,7 @@ Vectors = {
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
-	---@return table
+	---@return table vector
 	setToVA_SL = function(vectorToChange, vectorToCopyFrom)
 		for i, v in ipairs_SL(vectorToCopyFrom) do
 			vectorToChange[i] = v
@@ -323,28 +323,28 @@ Vectors = {
 
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
-	---@return table
+	---@return table vector
 	copyV2_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2]}
 	end,
 
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
-	---@return table
+	---@return table vector
 	copyV3_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2], vectorToCopy[3]}
 	end,
 
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
-	---@return table
+	---@return table vector
 	copyV4_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2], vectorToCopy[3], vectorToCopy[4]}
 	end,
 
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
-	---@return table
+	---@return table vector
 	copyVA_SL = function(vectorToCopy)
 		return {unpack_SL(vectorToCopy)}
 	end,
@@ -355,7 +355,7 @@ Vectors = {
 	---Returns a dot product of 2 vectors in 2D space.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number dot
 	dotV2_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2]
 	end,
@@ -363,7 +363,7 @@ Vectors = {
 	---Returns a dot product of 2 vectors in 3D space.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number dot
 	dotV3_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2] + vectorA[3] * vectorB[3]
 	end,
@@ -371,7 +371,7 @@ Vectors = {
 	---Returns a dot product of 2 vectors in 4D space.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number dot
 	dotV4_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2] + vectorA[3] * vectorB[3] + vectorA[4] * vectorB[4]
 	end,
@@ -379,7 +379,7 @@ Vectors = {
 	---Returns a dot product of 2 vectors.
 	---@param vectorA table is dominant in the size of the dot product
 	---@param vectorB table
-	---@return number
+	---@return number dot
 	dotVA_SL = function(vectorA, vectorB)
 		local dot = 0
 		for i, vec1Value in ipairs_SL(vectorA) do
@@ -390,28 +390,28 @@ Vectors = {
 
 	---Returns a magnitude of the vector in 2D space.
 	---@param vector table
-	---@return number
+	---@return number magnitude
 	magnitudeV2_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2)^0.5
 	end,
 
 	---Returns a magnitude of the vector in 3D space.
 	---@param vector table
-	---@return number
+	---@return number magnitude
 	magnitudeV3_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2 + vector[3]^2)^0.5
 	end,
 
 	---Returns a magnitude of the vector in 4D space.
 	---@param vector table
-	---@return number
+	---@return number magnitude
 	magnitudeV4_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2 + vector[3]^2 + vector[4]^2)^0.5
 	end,
 
 	---Returns a magnitude of the vector.
 	---@param vector table
-	---@return number
+	---@return number magnitude
 	magnitudeVA_SL = function(vector)
 		local mag = 0
 		for i, value in ipairs_SL(vector) do
@@ -423,7 +423,7 @@ Vectors = {
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number radians
 	angleV2_SL = function(vectorA, vectorB)
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV2_SL(vectorA, vectorB) / (Vectors.magnitudeV2_SL(vectorA) * Vectors.magnitudeV2_SL(vectorB) ) ) )
@@ -432,7 +432,7 @@ Vectors = {
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number radians
 	angleV3_SL = function(vectorA, vectorB)
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV3_SL(vectorA, vectorB) / (Vectors.magnitudeV3_SL(vectorA) * Vectors.magnitudeV3_SL(vectorB) ) ) )
@@ -441,7 +441,7 @@ Vectors = {
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number radians
 	angleV4_SL = function(vectorA, vectorB)
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV4_SL(vectorA, vectorB) / (Vectors.magnitudeV4_SL(vectorA) * Vectors.magnitudeV4_SL(vectorB) ) ) )
@@ -450,7 +450,7 @@ Vectors = {
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
-	---@return number
+	---@return number radians
 	angleVA_SL = function(vectorA, vectorB)
 		--local dot, magA, magB, angle
 		--dot = Vectors.dotVA_SL(vectorA, vectorB)
@@ -468,7 +468,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV2Q_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -482,7 +482,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV2_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -497,7 +497,7 @@ Vectors = {
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
-	---@return table
+	---@return table vector
 	scaleV2S_SL = function(vector, scalar)
 		return {
 			vector[1] * scalar,
@@ -509,7 +509,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV3Q_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -524,7 +524,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV3_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -540,7 +540,7 @@ Vectors = {
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
-	---@return table
+	---@return table vector
 	scaleV3S_SL = function(vector, scalar)
 		return {
 			vector[1] * scalar,
@@ -553,7 +553,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV4Q_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -569,7 +569,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleV4_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -586,7 +586,7 @@ Vectors = {
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
-	---@return table
+	---@return table vector
 	scaleV4S_SL = function(vector, scalar)
 		return {
 			vector[1] * scalar,
@@ -600,7 +600,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleVAQ_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -618,7 +618,7 @@ Vectors = {
 	---@param vector table
 	---@param scalar number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	scaleVA_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
@@ -632,7 +632,7 @@ Vectors = {
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
-	---@return table
+	---@return table vector
 	scaleVAS_SL = function(vector, scalar)
 		local newVec = {}
 
@@ -646,7 +646,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV2Q_SL = function(vector, outputVector)
 		outputVector = outputVector or {}
 
@@ -663,7 +663,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV2_SL = function(vector, outputVector)
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		local magnitude = Vectors.magnitudeV2_SL(vector)
@@ -674,7 +674,7 @@ Vectors = {
 
 	---A smaller variant of normalizing vectors.
 	---@param vector table
-	---@return table
+	---@return table vector
 	unitV2S_SL = function(vector)
 		local magnitude = Vectors.magnitudeV2_SL(vector)
 
@@ -685,7 +685,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV3Q_SL = function(vector, outputVector)
 		outputVector = outputVector or {}
 
@@ -703,7 +703,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV3_SL = function(vector, outputVector)
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		local magnitude = Vectors.magnitudeV3_SL(vector)
@@ -714,7 +714,7 @@ Vectors = {
 
 	---A smaller variant of normalizing vectors.
 	---@param vector table
-	---@return table
+	---@return table vector
 	unitV3S_SL = function(vector)
 		local magnitude = Vectors.magnitudeV3_SL(vector)
 
@@ -725,7 +725,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV4Q_SL = function(vector, outputVector)
 		outputVector = outputVector or {}
 
@@ -744,7 +744,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitV4_SL = function(vector, outputVector)
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		local magnitude = Vectors.magnitudeV4_SL(vector)
@@ -755,7 +755,7 @@ Vectors = {
 
 	---A smaller variant of normalizing vectors.
 	---@param vector table
-	---@return table
+	---@return table vector
 	unitV4S_SL = function(vector)
 		local magnitude = Vectors.magnitudeV4_SL(vector)
 
@@ -766,7 +766,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitVAQ_SL = function(vector, outputVector)
 		outputVector = outputVector or {}
 
@@ -790,7 +790,7 @@ Vectors = {
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	unitVA_SL = function(vector, outputVector)
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		local magnitude = Vectors.magnitudeVA_SL(vector)
@@ -801,7 +801,7 @@ Vectors = {
 
 	---A smaller variant of normalizing vectors.
 	---@param vector table
-	---@return table
+	---@return table vector
 	unitVAS_SL = function(vector)
 		local magnitude = Vectors.magnitudeVA_SL(vector)
 
@@ -816,7 +816,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV2Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -830,7 +830,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV2_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -843,7 +843,7 @@ Vectors = {
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	addV2S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] + vectorB[1],
@@ -855,7 +855,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV3Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -870,7 +870,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV3_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -884,7 +884,7 @@ Vectors = {
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	addV3S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] + vectorB[1],
@@ -897,7 +897,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV4Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -913,7 +913,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addV4_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -928,7 +928,7 @@ Vectors = {
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	addV4S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] + vectorB[1],
@@ -942,7 +942,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addVAQ_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -960,7 +960,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -974,7 +974,7 @@ Vectors = {
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	addVAS_SL = function(vectorA, vectorB)
 		local newVec = {}
 
@@ -989,7 +989,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV2Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1003,7 +1003,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV2_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1016,7 +1016,7 @@ Vectors = {
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	subV2S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] - vectorB[1],
@@ -1028,7 +1028,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV3Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1043,7 +1043,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV3_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1057,7 +1057,7 @@ Vectors = {
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	subV3S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] - vectorB[1],
@@ -1070,7 +1070,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV4Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1086,7 +1086,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subV4_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1101,7 +1101,7 @@ Vectors = {
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	subV4S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[1] - vectorB[1],
@@ -1115,7 +1115,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subVAQ_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1133,7 +1133,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	subVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1146,7 +1146,7 @@ Vectors = {
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	subVAS_SL = function(vectorA, vectorB)
 		local newVec = {}
 
@@ -1162,7 +1162,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV2Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1177,7 +1177,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV2_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1191,7 +1191,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param scalarForB number
-	---@return table
+	---@return table vector
 	addMultV2S_SL = function(vectorA, vectorB, scalarForB)
 		return {
 			vectorA[1] + scalarForB * vectorB[1],
@@ -1204,7 +1204,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV3Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1220,7 +1220,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV3_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1235,7 +1235,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param scalarForB number
-	---@return table
+	---@return table vector
 	addMultV3S_SL = function(vectorA, vectorB, scalarForB)
 		return {
 			vectorA[1] + scalarForB * vectorB[1],
@@ -1249,7 +1249,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV4Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1266,7 +1266,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultV4_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1282,7 +1282,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param scalarForB number
-	---@return table
+	---@return table vector
 	addMultV4S_SL = function(vectorA, vectorB, scalarForB)
 		return {
 			vectorA[1] + scalarForB * vectorB[1],
@@ -1297,7 +1297,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultVAQ_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1316,7 +1316,7 @@ Vectors = {
 	---@param vectorB table
 	---@param scalarForB number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	addMultVA_SL = function(vectorA, vectorB, scalarForB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1331,7 +1331,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param scalarForB number
-	---@return table
+	---@return table vector
 	addMultVAS_SL = function(vectorA, vectorB, scalarForB)
 		local newVec = {}
 
@@ -1346,7 +1346,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	crossV3Q_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1361,7 +1361,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	crossV3_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1375,7 +1375,7 @@ Vectors = {
 	---A smaller variant of cross product.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	crossV3S_SL = function(vectorA, vectorB)
 		return {
 			vectorA[2] * vectorB[3] - vectorA[3] * vectorB[2],
@@ -1388,7 +1388,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV2Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1407,7 +1407,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV2_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1426,7 +1426,7 @@ Vectors = {
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	projectV2S_SL = function(vectorA, vectorB)
 		return Vectors.scaleV2S_SL(vectorB,
 			Vectors.dotV2_SL(vectorA, vectorB) / Vectors.dotV2_SL(vectorB,vectorB)
@@ -1437,7 +1437,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV3Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1457,7 +1457,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV3_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1476,7 +1476,7 @@ Vectors = {
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	projectV3S_SL = function(vectorA, vectorB)
 		return Vectors.scaleV3S_SL(vectorB,
 			Vectors.dotV3_SL(vectorA, vectorB) / Vectors.dotV3_SL(vectorB,vectorB)
@@ -1487,7 +1487,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV4Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1508,7 +1508,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectV4_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1527,7 +1527,7 @@ Vectors = {
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	projectV4S_SL = function(vectorA, vectorB)
 		return Vectors.scaleV4S_SL(vectorB,
 			Vectors.dotV4_SL(vectorA, vectorB) / Vectors.dotV4_SL(vectorB,vectorB)
@@ -1538,7 +1538,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectVAQ_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar = 0, 0
 		outputVector = outputVector or {}
@@ -1563,7 +1563,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	projectVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1582,7 +1582,7 @@ Vectors = {
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	projectVAS_SL = function(vectorA, vectorB)
 		return Vectors.scaleVAS_SL(vectorB,
 			Vectors.dotVA_SL(vectorA, vectorB) / Vectors.dotVA_SL(vectorB,vectorB)
@@ -1593,7 +1593,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV2Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1612,7 +1612,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV2_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1628,7 +1628,7 @@ Vectors = {
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	rejectV2S_SL = function(vectorA, vectorB)
 		return Vectors.subV2S_SL(vectorA, Vectors.projectV2S_SL(vectorA, vectorB) )
 	end,
@@ -1637,7 +1637,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV3Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1657,7 +1657,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV3_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1673,7 +1673,7 @@ Vectors = {
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	rejectV3S_SL = function(vectorA, vectorB)
 		return Vectors.subV3_SL(vectorA, Vectors.projectV3_SL(vectorA, vectorB) )
 	end,
@@ -1682,7 +1682,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV4Q_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar
 		outputVector = outputVector or {}
@@ -1703,7 +1703,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectV4_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1719,7 +1719,7 @@ Vectors = {
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	rejectV4S_SL = function(vectorA, vectorB)
 		return Vectors.subV4S_SL(vectorA, Vectors.projectV4S_SL(vectorA, vectorB) )
 	end,
@@ -1728,7 +1728,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectVAQ_SL = function(vectorA, vectorB, outputVector)
 		local dotAB, dotBB, scalar = 0, 0
 		outputVector = outputVector or {}
@@ -1753,7 +1753,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	rejectVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
@@ -1769,7 +1769,7 @@ Vectors = {
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
-	---@return table
+	---@return table vector
 	rejectVAS_SL = function(vectorA, vectorB)
 		return Vectors.subV4S_SL(vectorA, Vectors.projectV4S_SL(vectorA, vectorB) )
 	end,
@@ -1779,7 +1779,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV2Q_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1794,7 +1794,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV2_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1809,7 +1809,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param t number
-	---@return table
+	---@return table vector
 	lerpV2S_SL = function(vectorA, vectorB, t)
 		return Vectors.addV2S_SL(
 			Vectors.scaleV2S_SL(vectorA, 1-t),
@@ -1822,7 +1822,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV3Q_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1838,7 +1838,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV3_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1853,7 +1853,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param t number
-	---@return table
+	---@return table vector
 	lerpV3S_SL = function(vectorA, vectorB, t)
 		return Vectors.addV3S_SL(
 			Vectors.scaleV3S_SL(vectorA, 1-t),
@@ -1866,7 +1866,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV4Q_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1883,7 +1883,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpV4_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1898,7 +1898,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param t number
-	---@return table
+	---@return table vector
 	lerpV4S_SL = function(vectorA, vectorB, t)
 		return Vectors.addV4S_SL(
 			Vectors.scaleV4S_SL(vectorA, 1-t),
@@ -1911,7 +1911,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpVAQ_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1930,7 +1930,7 @@ Vectors = {
 	---@param vectorB table
 	---@param t number
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	lerpVA_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
@@ -1945,7 +1945,7 @@ Vectors = {
 	---@param vectorA table
 	---@param vectorB table
 	---@param t number
-	---@return table
+	---@return table vector
 	lerpVAS_SL = function(vectorA, vectorB, t)
 		return Vectors.addVAS_SL(
 			Vectors.scaleVAS_SL(vectorA, 1-t),
@@ -1957,7 +1957,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV2Q_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, v1, v2
@@ -1976,7 +1976,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV2_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, v1, v2
@@ -1994,7 +1994,7 @@ Vectors = {
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
-	---@return table
+	---@return table vector
 	matMultV2S_SL = function(vector, matrix)
 		--char saves documented in matMultV4S_SL
 		local row1, row2, v1, v2
@@ -2012,7 +2012,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV3Q_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, row3, v1, v2, v3
@@ -2034,7 +2034,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV3_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, row3, v1, v2, v3
@@ -2055,7 +2055,7 @@ Vectors = {
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
-	---@return table
+	---@return table vector
 	matMultV3S_SL = function(vector, matrix)
 		--char saves documented in matMultV4S_SL
 		local row1, row2, row3, v1, v2, v3
@@ -2076,7 +2076,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV4Q_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, row3, row4, v1, v2, v3, v4
@@ -2101,7 +2101,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultV4_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 		local row1, row2, row3, row4, v1, v2, v3, v4
@@ -2125,7 +2125,7 @@ Vectors = {
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
-	---@return table
+	---@return table vector
 	matMultV4S_SL = function(vector, matrix)
 		--declaration costs: 6 + 8*2 = 22
 		--each assignment costs: 6 for a total of 48 and plus 22 = 70
@@ -2154,7 +2154,7 @@ Vectors = {
 	---@param vector table
 	---@param matrix table
 	---@param outputVector table?
-	---@return table
+	---@return table vector
 	matMultVAQ_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 
@@ -2177,7 +2177,7 @@ Vectors = {
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
-	---@return table
+	---@return table vector
 	matMultVAS_SL = function(vector, matrix)
 		local outputVector, v = {}
 
