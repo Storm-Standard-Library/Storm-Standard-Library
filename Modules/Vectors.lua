@@ -102,18 +102,18 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=S
 ---@field subVAQ_SL fun(vectorA:table,vectorB:table,outputVector:table?):table
 ---@field subVA_SL fun(vectorA:table,vectorB:table,outputVector:table?):table
 ---@field subVAS_SL fun(vectorA:table,vectorB:table):table
----@field addMultV2Q_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV2_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV2S_SL fun(vectorA:table,vectorB:table,scalarForB:number):table
----@field addMultV3Q_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV3_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV3S_SL fun(vectorA:table,vectorB:table,scalarForB:number):table
----@field addMultV4Q_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV4_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultV4S_SL fun(vectorA:table,vectorB:table,scalarForB:number):table
----@field addMultVAQ_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultVA_SL fun(vectorA:table,vectorB:table,scalarForB:number,outputVector:table?):table
----@field addMultVAS_SL fun(vectorA:table,vectorB:table,scalarForB:number):table
+---@field addMultV2Q_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV2_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV2S_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?):table
+---@field addMultV3Q_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV3_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV3S_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?):table
+---@field addMultV4Q_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV4_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultV4S_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?):table
+---@field addMultVAQ_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultVA_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?,outputVector:table?):table
+---@field addMultVAS_SL fun(vectorA:table,vectorB:table,scalarForA:number?,scalarForB:number?):table
 ---@field crossV3Q_SL fun(vectorA:table,vectorB:table,outputVector:table?):table
 ---@field crossV3_SL fun(vectorA:table,vectorB:table,outputVector:table?):table
 ---@field crossV3S_SL fun(vectorA:table,vectorB:table):table
@@ -1320,14 +1320,17 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV2Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV2Q_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		outputVector[1] = vectorA[1] + scalarForB * vectorB[1]
-		outputVector[2] = vectorA[2] + scalarForB * vectorB[2]
+		outputVector[1] = scalarForA * vectorA[1] + scalarForB * vectorB[1]
+		outputVector[2] = scalarForA * vectorA[2] + scalarForB * vectorB[2]
 
 		return outputVector
 	end,
@@ -1337,15 +1340,18 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV2_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV2_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
 		return Vectors.setV2_SL(outputVector,
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2]
 		)
 	end,
 	---@endsection
@@ -1354,12 +1360,15 @@ Vectors = {
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@return table vector
-	addMultV2S_SL = function(vectorA, vectorB, scalarForB)
+	addMultV2S_SL = function(vectorA, vectorB, scalarForA, scalarForB)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		return {
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2]
 		}
 	end,
 	---@endsection
@@ -1368,15 +1377,18 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV3Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV3Q_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		outputVector[1] = vectorA[1] + scalarForB * vectorB[1]
-		outputVector[2] = vectorA[2] + scalarForB * vectorB[2]
-		outputVector[3] = vectorA[3] + scalarForB * vectorB[3]
+		outputVector[1] = scalarForA * vectorA[1] + scalarForB * vectorB[1]
+		outputVector[2] = scalarForA * vectorA[2] + scalarForB * vectorB[2]
+		outputVector[3] = scalarForA * vectorA[3] + scalarForB * vectorB[3]
 
 		return outputVector
 	end,
@@ -1386,16 +1398,19 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV3_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV3_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
 		return Vectors.setV3_SL(outputVector,
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2],
-			vectorA[3] + scalarForB * vectorB[3]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2],
+			scalarForA * vectorA[3] + scalarForB * vectorB[3]
 		)
 	end,
 	---@endsection
@@ -1404,13 +1419,16 @@ Vectors = {
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@return table vector
-	addMultV3S_SL = function(vectorA, vectorB, scalarForB)
+	addMultV3S_SL = function(vectorA, vectorB, scalarForA, scalarForB)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		return {
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2],
-			vectorA[3] + scalarForB * vectorB[3]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2],
+			scalarForA * vectorA[3] + scalarForB * vectorB[3]
 		}
 	end,
 	---@endsection
@@ -1419,16 +1437,19 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV4Q_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV4Q_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		outputVector[1] = vectorA[1] + scalarForB * vectorB[1]
-		outputVector[2] = vectorA[2] + scalarForB * vectorB[2]
-		outputVector[3] = vectorA[3] + scalarForB * vectorB[3]
-		outputVector[3] = vectorA[4] + scalarForB * vectorB[4]
+		outputVector[1] = scalarForA * vectorA[1] + scalarForB * vectorB[1]
+		outputVector[2] = scalarForA * vectorA[2] + scalarForB * vectorB[2]
+		outputVector[3] = scalarForA * vectorA[3] + scalarForB * vectorB[3]
+		outputVector[3] = scalarForA * vectorA[4] + scalarForB * vectorB[4]
 
 		return outputVector
 	end,
@@ -1438,17 +1459,20 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultV4_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultV4_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
 		return Vectors.setV4_SL(outputVector,
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2],
-			vectorA[3] + scalarForB * vectorB[3],
-			vectorA[4] + scalarForB * vectorB[4]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2],
+			scalarForA * vectorA[3] + scalarForB * vectorB[3],
+			scalarForA * vectorA[4] + scalarForB * vectorB[4]
 		)
 	end,
 	---@endsection
@@ -1457,14 +1481,17 @@ Vectors = {
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@return table vector
-	addMultV4S_SL = function(vectorA, vectorB, scalarForB)
+	addMultV4S_SL = function(vectorA, vectorB, scalarForA, scalarForB)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		return {
-			vectorA[1] + scalarForB * vectorB[1],
-			vectorA[2] + scalarForB * vectorB[2],
-			vectorA[3] + scalarForB * vectorB[3],
-			vectorA[4] + scalarForB * vectorB[4]
+			scalarForA * vectorA[1] + scalarForB * vectorB[1],
+			scalarForA * vectorA[2] + scalarForB * vectorB[2],
+			scalarForA * vectorA[3] + scalarForB * vectorB[3],
+			scalarForA * vectorA[4] + scalarForB * vectorB[4]
 		}
 	end,
 	---@endsection
@@ -1473,14 +1500,17 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultVAQ_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultVAQ_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
-			outputVector[i] = vec1Value + scalarForB * vectorB[i]
+		for i, vecAValue in ipairs_SL(vectorA) do
+			outputVector[i] = scalarForA * vecAValue + scalarForB * vectorB[i]
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
@@ -1494,14 +1524,17 @@ Vectors = {
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@param outputVector table?
 	---@return table vector
-	addMultVA_SL = function(vectorA, vectorB, scalarForB, outputVector)
+	addMultVA_SL = function(vectorA, vectorB, scalarForA, scalarForB, outputVector)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
-			outputVector[i] = vec1Value + scalarForB * vectorB[i]
+		for i, vecAValue in ipairs_SL(vectorA) do
+			outputVector[i] = scalarForA * vecAValue + scalarForB * vectorB[i]
 		end
 
 		return Vectors.pruneVA_SL(outputVector, #vectorA)
@@ -1512,13 +1545,16 @@ Vectors = {
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
-	---@param scalarForB number
+	---@param scalarForA number?
+	---@param scalarForB number?
 	---@return table vector
-	addMultVAS_SL = function(vectorA, vectorB, scalarForB)
+	addMultVAS_SL = function(vectorA, vectorB, scalarForA, scalarForB)
+		scalarForA = scalarForA or 1
+		scalarForB = scalarForB or 1
 		local newVec = {}
 
 		for i = 1, #vectorA do
-			newVec[i] = vectorA[i] + scalarForB * vectorB[i]
+			newVec[i] = scalarForA * vectorA[i] + scalarForB * vectorB[i]
 		end
 
 		return newVec
