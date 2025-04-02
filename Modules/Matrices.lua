@@ -18,7 +18,7 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Matrices=
 ---@field verifySquareM_SL fun(matrix:table):boolean
 ---@field verifyMatchinDimensionsM_SL fun(matrixA:table,matrixB:table):boolean
 ---@field identityM_SL fun(size:integer):table
----@field addM_SL fun(matrixA:table,matrixB:table,scaleA:number,scaleB:number):table?
+---@field addM_SL fun(matrixA:table,matrixB:table,scaleA:number?,scaleB:number?):table?
 ---@field scaleM_SL fun(matrix:table,scaleBy:number):table
 ---@field transposeM_SL fun(matrix:table):table
 ---@field multiplyM_SL fun(matrixA:table,matrixB:table):table?
