@@ -13,6 +13,9 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field ewma_SL fun(old:number, new:number, gamma:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
 	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
+	---@field delta_SL fun(currentValue:number, oldvalue:number):number
+	---@field deltaClass_SL fun(innitialValue:number?):table
+	---@field deltaClosure_SL fun(innitialValue:number?):fun(newValue:number):number
 	---@field thresholdEx_SL fun(x:number, min:number, max:number):boolean
 	---@field thresholdInc_SL fun(x:number, min:number, max:number):boolean
 	---@field fixNanTo0_SL fun(value:number):number
@@ -88,12 +91,12 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				alpha = alpha or 0.1,
 				value = initialValue or 0,
 				---Updates & runs the EWMA smoothing on the new value.
-				---@param s EWMA self Table
+				---@param self EWMA self Table
 				---@param newValue number new value to smooth
 				---@return number smoothed Output of the EWMA
-				update = function(s, newValue)
-					s.value = (1 - s.alpha) * s.value + s.alpha * newValue
-					return s.value
+				update = function(self, newValue)
+					self.value = (1 - self.alpha) * self.value + self.alpha * newValue
+					return self.value
 				end
 			}
 		end,
@@ -115,6 +118,51 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
+		---@section delta_SL
+		---@param currentValue number
+		---@param oldValue number
+		---@return number delta
+		delta_SL = function (currentValue, oldValue)
+			return currentValue - oldValue
+		end,
+		---@endsection
+
+		---@section deltaClass_SL
+		---@class delta
+		---@field oldValue number the number stored from previous update
+		---@field update fun(newValue:number):number
+		---@param innitialValue number?
+		---@return table
+		deltaClass_SL = function (innitialValue)
+			return {
+				oldValue = innitialValue or 0,
+				---@param self table
+				---@param newValue number
+				---@return number delta
+				update = function(self, newValue)
+					local delta = newValue - self.oldValue
+					self.oldValue = newValue
+					return delta
+				end
+			}
+		end,
+		---@endsection
+
+		---@section deltaClosure_SL
+		---@param innitialValue number?
+		---@return fun(newValue:number):number delta
+		deltaClosure_SL = function (innitialValue)
+			innitialValue = innitialValue or 0
+			---@param newValue number
+			---@return number delta
+			return function(newValue)
+				local delta = newValue - innitialValue
+				innitialValue = newValue
+				return delta
+			end
+		end,
+		---@endsection
+
 		---@section thresholdEx_SL
 		---Returns true if x is within the exclusive range from min to max. i.e. min < x < max
 		---@param x number
@@ -125,7 +173,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 			return min<x and x<max
 		end,
 		---@endsection
-		
+
 		---@section thresholdInc_SL
 		---Returns true if x is on the inclusive range from and including min to and including max. i.e. min ≤ x ≤ max
 		---@param x number
@@ -173,7 +221,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param fixValue number
 		---@return number
 		fixInfToAny_SL = function(value, fixValue)
-			if math.abs(value)==math.huge then
+			if math.abs(value) == 1/0 then
 				return fixValue
 			end
 			return value
@@ -184,7 +232,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param value number
 		---@return boolean
 		checkInf_SL = function(value)
-			return math.abs(value)==math.huge
+			return math.abs(value) == 1/0
 		end,
 		---@endsection
 
@@ -193,7 +241,32 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param value number value to correct
 		---@return number corrected will be 0 if NaN or ±inf, otherwise the provided value
 		fixNanInfTo0_SL = function(value)
-			return (math.abs(value)==math.huge or value ~= value) and 0 or value
+			return (math.abs(value) == 1/0 or value ~= value) and 0 or value
+		end,
+		---@endsection
+
+		---@section fixNanInfToAny_SL
+		---Replaces NaN and ±inf with corresponding values.
+		---@param value number value to correct
+		---@param fixNanTo number a value to replace NaN with
+		---@param fixInfTo number a value to replace Inf with
+		---@param signedInfFixFlag any if truthy then fixInfTo will have the same sign as inf, otherwise is absolute
+		---@return number corrected will be 0 if NaN or ±inf, otherwise the provided value
+		fixNanInfToAny_SL = function(value, fixNanTo, fixInfTo, signedInfFixFlag)
+			if math.abs(value) == 1/0 then
+				value = signedInfFixFlag and value<0 and -fixInfTo or fixInfTo
+			elseif value ~= value then
+				value = fixNanTo
+			end
+			return value
+		end,
+		---@endsection
+
+		---@section checkInfNan_SL
+		---@param value number
+		---@return boolean
+		checkInfNan_SL = function(value)
+			return math.abs(value) == 1/0 or value ~= value
 		end,
 		---@endsection
 
@@ -244,15 +317,15 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section remap_SL
-		---Remaps a value from one range to another. linearly interpolates/affinely transforms the value from [x1,y1] to [x2,y2]. Is the same as invlerping then lerping.
+		---Remaps a number from one range to another. It takes value assumed to be within input range and linearly maps it to a corresponding value in output range.
 		---@param value number value to remap
-		---@param x1 number start of the input range
-		---@param y1 number end of the input range
-		---@param x2 number start of the output range
-		---@param y2 number end of the output range
-		---@return number transformedValue value remapped from [x1,y1] to [x2,y2] 
-		remap_SL = function(value, x1, y1, x2, y2)
-			return x2 + (value - x1) * (y2 - x2) / (y1 - x1)
+		---@param fromLow number start of the input range
+		---@param fromHigh number end of the input range
+		---@param toLow number start of the output range
+		---@param toHigh number end of the output range
+		---@return number transformedValue in new range
+		remap_SL = function(value, fromLow, fromHigh, toLow, toHigh)
+			return fromLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow)
 		end,
 		---@endsection
 
