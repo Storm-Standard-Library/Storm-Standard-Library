@@ -165,6 +165,7 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=S
 ---@field matMultVAQ_SL fun(vector:table,matrix:table,outputVector:table?):table
 ---@field matMultVA_SL fun(vector:table,matrix:table,outputVector:table?):table
 ---@field matMultVAS_SL fun(vector:table,matrix:table):table
+---@field printVector_SL fun(vector:table,digits:integer?):nil
 ---Standard Stormworks Vector functions
 Vectors = {
 
@@ -2508,6 +2509,31 @@ Vectors = {
 		end
 
 		return outputVector
+	end,
+	---@endsection
+
+
+
+
+	---@section printVector_SL
+	---@param vector table
+	---@param digits integer?
+	printVector_SL = function(vector, digits)
+		digits = math.floor(digits or 2)
+		local text
+		if #vector <= 4 then
+			local dims = {'x', 'y', 'z', 'w'}
+			for i = 1, #vector do
+				text = text and (text .. (' '):rep(12 - #text%12) ) or ''
+				text = text .. dims[i] .. ': ' .. string.format('%.' .. digits .. 'f', vector[1])..', '
+			end
+		else
+			for i = 1, #vector do
+				text = text and (text .. (' '):rep(12 - #text%12) ) or ''
+				text = text .. string.format('%.' .. digits .. 'f', vector[1])..', '
+			end
+		end
+		print(text)
 	end,
 	---@endsection
 }
