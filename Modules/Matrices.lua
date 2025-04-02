@@ -1,5 +1,14 @@
-local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Matrices=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
 
+
+---@section __LB_SIMULATOR_ONLY_STORMSL_MATRICES_START__
+do
+local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Matrices=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
+---@endsection
+
+
+
+
+---@section Matrices 1 STORMSL_MATRICES_CLASS
 ---@class Matrices
 ---@field newRowsM_SL fun(...:table):table
 ---@field newValuesM_SL fun(rows:integer,columns:integer,...:number):table
@@ -25,13 +34,16 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Matrices=
 ---Standard Stormworks matrix functions
 Matrices = {
 
+	---@section newRowsM_SL
 	---Returns a new matrix object
 	---@param ... table each entry should be a complete row
 	---@return table matrix
 	newRowsM_SL = function(...)
 		return {...}
 	end,
+	---@endsection 
 
+	---@section newValuesM_SL
 	---Returns a new matrix object
 	---@param rows integer
 	---@param columns integer
@@ -47,7 +59,9 @@ Matrices = {
 		end
 		return matrix
 	end,
+	---@endsection 
 
+	---@section getValueM_SL
 	---Returns the value stored in matrix, acts as a tutorial of inner structure
 	---@param matrix table
 	---@param row integer
@@ -56,7 +70,9 @@ Matrices = {
 	getValueM_SL = function(matrix, row, column)
 		return matrix[row][column]
 	end,
+	---@endsection 
 
+	---@section setValueM_SL
 	---Sets the inside of a matrix to some value, acts as a tutorial of inner structure
 	---@param matrix table
 	---@param row integer
@@ -65,7 +81,9 @@ Matrices = {
 	setValueM_SL = function(matrix, row, column, value)
 		matrix[row][column] = value
 	end,
+	---@endsection 
 
+	---@section copyM_SL
 	---Copies a matrix and returns the copy.
 	---@param matrix table
 	---@return table copyMatrix
@@ -76,14 +94,18 @@ Matrices = {
 		end
 		return copyMatrix
 	end,
+	---@endsection 
 
+	---@section verifySquareM_SL
 	---Checks whether the matrix is square
 	---@param matrix table
 	---@return boolean isSquare
 	verifySquareM_SL = function(matrix)
 		return #matrix == #matrix[1]
 	end,
+	---@endsection 
 
+	---@section verifyMatchingDimensionsM_SL
 	---Checks whether matrices are of the same dimensions
 	---@param matrixA table
 	---@param matrixB table
@@ -91,7 +113,9 @@ Matrices = {
 	verifyMatchingDimensionsM_SL = function(matrixA, matrixB)
 		return #matrixA == #matrixB and #matrixA[1] == matrixB[1]
 	end,
+	---@endsection 
 
+	---@section identityM_SL
 	---Will return an identityM_SL matrix of specified size
 	---@param size integer
 	---@return table identity
@@ -105,7 +129,9 @@ Matrices = {
 		end
 		return outputMatrix
 	end,
+	---@endsection 
 
+	---@section addM_SL
 	---If the dimensions match returns the addition of scaled matrices, nil otherwise
 	---@param matrixA table
 	---@param matrixB table
@@ -129,8 +155,10 @@ Matrices = {
 
 		return outMatrix
 	end,
+	---@endsection 
 
-	---comment
+	---@section scaleM_SL
+	---If the dimensions match returns the scaled matrix, nil otherwise
 	---@param matrix any
 	---@param scaleBy any
 	---@return table matrix
@@ -146,7 +174,9 @@ Matrices = {
 
 		return outMatrix
 	end,
+	---@endsection 
 
+	---@section transposeM_SL
 	---Transposes the matrix
 	---@param matrix table
 	---@return table matrix
@@ -162,7 +192,9 @@ Matrices = {
 
 		return outMatrix
 	end,
+	---@endsection 
 
+	---@section multiplyM_SL
 	---If the dimension match will return a multiplication of input matrices, nil otherwise
 	---@param matrixA table
 	---@param matrixB table
@@ -187,7 +219,9 @@ Matrices = {
 
 		return outMatrix
 	end,
+	---@endsection 
 
+	---@section minorM_SL
 	---Will return a minor of a matrix
 	---@param matrix table
 	---@param row integer
@@ -203,7 +237,9 @@ Matrices = {
 
 		return outputMatrix
 	end,
+	---@endsection 
 
+	---@section det1M_SL
 	---If the matrix is square returns the determinant of it, otherwise nil. Optimized for size 1 matrix
 	---@param matrix table
 	---@return number? determinant
@@ -212,7 +248,9 @@ Matrices = {
 		       and matrix[1][1]
 		       or nil
 	end,
+	---@endsection 
 
+	---@section det2M_SL
 	---If the matrix is square returns the determinant of it, otherwise nil. Optimized for size 2 matrix
 	---@param matrix table
 	---@return number? determinant
@@ -221,21 +259,26 @@ Matrices = {
 		       and matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]
 		       or nil
 	end,
+	---@endsection 
 
+	---@section det3M_SL
 	---If the matrix is square returns the determinant of it, otherwise nil. Optimized for size 3 matrix
 	---@param matrix table
 	---@return number? determinant
 	det3M_SL = function(matrix)
+		local row1, row2, row3 = matrix[1], matrix[2], matrix[3]
 		return Matrices.verifySquareM_SL(matrix) and 0
-			+ matrix[1][1] * matrix[2][2] * matrix[3][3]
-			+ matrix[1][2] * matrix[2][3] * matrix[3][1]
-			+ matrix[1][3] * matrix[2][1] * matrix[3][2]
-			- matrix[1][1] * matrix[2][3] * matrix[3][2]
-			- matrix[1][2] * matrix[2][1] * matrix[3][3]
-			- matrix[1][3] * matrix[2][2] * matrix[3][1]
+			+ row1[1] * row2[2] * row3[3]
+			+ row1[2] * row2[3] * row3[1]
+			+ row1[3] * row2[1] * row3[2]
+			- row1[1] * row2[3] * row3[2]
+			- row1[2] * row2[1] * row3[3]
+			- row1[3] * row2[2] * row3[1]
 			or nil
 	end,
+	---@endsection 
 
+	---@section 
 	---If the matrix is square returns the determinant of it, otherwise nil. Works for any matrix size using leibniz expansion
 	---@param matrix table
 	---@return number? determinant
@@ -244,25 +287,27 @@ Matrices = {
 			return
 		end
 
-		local size, det = #matrix, 0
+		local size, det, row1, row2, row3, minor = #matrix, 0, matrix[1], matrix[2], matrix[3]
 		if size==1 then
 			return matrix[1][1]
 		elseif size == 2 then
 			return matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]
 		elseif size == 3 then
 			for i = 1, 3 do
-				det = det + matrix[1][i] * matrix[2][1 + i % 3] * matrix[3][1 + (i + 1) % 3]
-				          - matrix[1][i] * matrix[2][(i + 1) % 3 + 1] * matrix[2][1 + i % 3]
+				det = det + row1[i] * row2[1 + i % 3] * row3[1 + (i + 1) % 3]
+				          - row1[i] * row2[(i + 1) % 3 + 1] * row3[1 + i % 3]
 			end
 		elseif size >= 4 then
 			for i = 1, size do
-				local minor = Matrices.minorM_SL(matrix, 1, i)
+				minor = Matrices.minorM_SL(matrix, 1, i)
 				det = det + (-1) ^ (i+1) * matrix[1][i] * Matrices.detLeibnizM_SL(minor)
 			end
 		end
 		return det
 	end,
+	---@endsection 
 
+	---@section detUpperTriangleM_SL
 	---If the matrix is square returns the determinant of it, otherwise nil. Works for any matrix size by calculating the upper triangle of the matrix
 	---@param matrix table
 	---@return number? determinant
@@ -275,7 +320,9 @@ Matrices = {
 			return multiplication
 		end
 	end,
+	---@endsection 
 
+	---@section cofactorM_SL
 	---If the matrix is square, will return a cofactor matrix, nil otherwise
 	---@param matrix table
 	---@return table? cofactor
@@ -290,7 +337,9 @@ Matrices = {
 		end
 		return cofactorMatrix
 	end,
+	---@endsection 
 
+	---@section inverseM_SL
 	---If the matrix is square and has non zero determinant it will return an inverse of the matrix, nil otherwise
 	---@param matrix table
 	---@return table? inverse
@@ -303,7 +352,9 @@ Matrices = {
 		inverse = Matrices.transposeM_SL(inverse)
 		return Matrices.scaleM_SL(matrix, 1 / det)
 	end,
+	---@endsection 
 
+	---@section upperTriangleM_SL
 	---If the matrix is square it will return an upper matrix and a sign (1 or -1) depending on how the determinant was changed, nil otherwise
 	---@param matrix table
 	---@return table?
@@ -334,6 +385,14 @@ Matrices = {
 		::done::
 		return out,sign
 	end,
+	---@endsection 
 }
 
 StormSL.Matrices = Matrices
+---@endsection STORMSL_MATRICES_CLASS
+
+
+
+---@section __LB_SIMULATOR_ONLY_STORMSL_MATRICES_END__
+end
+---@endsection
