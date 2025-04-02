@@ -1,5 +1,3 @@
-local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
-
 --[[
 	lacking:
 		exterior/wedge product
@@ -15,6 +13,17 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=S
 		pointwise multiplication and division as SIMD for VMs
 ]]
 
+
+
+
+---@section __LB_SIMULATOR_ONLY_STORMSL_VECTORS_START__
+do
+local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
+---@endsection
+
+
+
+---@section Vectors 1 STORMSL_VECTORS_CLASS
 ---@class Vectors
 ---@field newV2_SL fun(x:number?,y:number?):table
 ---@field newV3_SL fun(x:number?,y:number?,z:number?):table
@@ -158,6 +167,8 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=S
 ---@field matMultVAS_SL fun(vector:table,matrix:table):table
 ---Standard Stormworks Vector functions
 Vectors = {
+
+	---@section newV2_SL
 	---Creates a new 2D vector, if any of the arguments are nil, it will default to 0.
 	---@param x number?
 	---@param y number?
@@ -168,7 +179,9 @@ Vectors = {
 			y or 0,
 		}
 	end,
+	---@endsection
 
+	---@section newV3_SL
 	---Creates a new 3D vector, if any of the arguments are nil, it will default to 0.
 	---@param x number?
 	---@param y number?
@@ -181,7 +194,9 @@ Vectors = {
 			z or 0
 		}
 	end,
+	---@endsection
 
+	---@section newV4_SL
 	---Creates a new 4D vector, if any of the arguments are nil, it will default to 0.
 	---@param x number?
 	---@param y number?
@@ -196,7 +211,9 @@ Vectors = {
 			w or 0
 		}
 	end,
+	---@endsection
 
+	---@section newVA_SL
 	---Creates a new vector of any size.
 	---@param ... number values of the vector, if only one argument is given, it will create a vector of that size filled with 0s
 	---@return table vector
@@ -209,10 +226,12 @@ Vectors = {
 		end
 		return newVector
 	end,
+	---@endsection
 
 
 
 
+	---@section pruneVA_SL
 	---Prunes the vector to the given size by deleting it's dimensions.
 	---@param vector table
 	---@param size number
@@ -223,7 +242,9 @@ Vectors = {
 		end
 		return vector
 	end,
+	---@endsection
 
+	---@section setV2_SL
 	---Sets the values of a vector to the given values.
 	---@param vectorToChange table vector to change
 	---@param x number new x value
@@ -234,7 +255,9 @@ Vectors = {
 		vectorToChange[2] = y
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setV3_SL
 	---Sets the values of a vector to the given values.
 	---@param vectorToChange table vector to change
 	---@param x number new x value
@@ -247,7 +270,9 @@ Vectors = {
 		vectorToChange[3] = z
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setV4_SL
 	---Sets the values of a vector to the given values.
 	---@param vectorToChange table
 	---@param x number new x value
@@ -262,7 +287,9 @@ Vectors = {
 		vectorToChange[4] = w
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setVA_SL
 	---Sets the values of a vector to the given values.
 	---@param vectorToChange table
 	---@param ... number
@@ -275,7 +302,9 @@ Vectors = {
 		Vectors.pruneVA_SL(vectorToChange, #args)
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setToV2_SL
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
@@ -285,7 +314,9 @@ Vectors = {
 		vectorToChange[2] = vectorToCopyFrom[2]
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setToV3_SL
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
@@ -296,7 +327,9 @@ Vectors = {
 		vectorToChange[3] = vectorToCopyFrom[3]
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setToV4_SL
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
@@ -308,7 +341,9 @@ Vectors = {
 		vectorToChange[4] = vectorToCopyFrom[4]
 		return vectorToChange
 	end,
+	---@endsection
 
+	---@section setToVA_SL
 	---Copies the values of a vector to another vector.
 	---@param vectorToChange table
 	---@param vectorToCopyFrom table
@@ -317,41 +352,51 @@ Vectors = {
 		for i, v in ipairs_SL(vectorToCopyFrom) do
 			vectorToChange[i] = v
 		end
-		Vectors.pruneVA_SL(vectorToChange, #vectorToCopyFrom)
-		return vectorToChange
-	end,
 
+		return Vectors.pruneVA_SL(vectorToChange, #vectorToCopyFrom)
+	end,
+	---@endsection
+
+	---@section copyV2_SL
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
 	---@return table vector
 	copyV2_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2]}
 	end,
+	---@endsection
 
+	---@section copyV3_SL
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
 	---@return table vector
 	copyV3_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2], vectorToCopy[3]}
 	end,
+	---@endsection
 
+	---@section copyV4_SL
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
 	---@return table vector
 	copyV4_SL = function(vectorToCopy)
 		return {vectorToCopy[1], vectorToCopy[2], vectorToCopy[3], vectorToCopy[4]}
 	end,
+	---@endsection
 
+	---@section copyVA_SL
 	---Copies the vector and returns it.
 	---@param vectorToCopy table
 	---@return table vector
 	copyVA_SL = function(vectorToCopy)
 		return {unpack_SL(vectorToCopy)}
 	end,
+	---@endsection
 
 
 
 
+	---@section dotV2_SL
 	---Returns a dot product of 2 vectors in 2D space.
 	---@param vectorA table
 	---@param vectorB table
@@ -359,7 +404,9 @@ Vectors = {
 	dotV2_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2]
 	end,
+	---@endsection
 
+	---@section dotV3_SL
 	---Returns a dot product of 2 vectors in 3D space.
 	---@param vectorA table
 	---@param vectorB table
@@ -367,7 +414,9 @@ Vectors = {
 	dotV3_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2] + vectorA[3] * vectorB[3]
 	end,
+	---@endsection
 
+	---@section dotV4_SL
 	---Returns a dot product of 2 vectors in 4D space.
 	---@param vectorA table
 	---@param vectorB table
@@ -375,7 +424,9 @@ Vectors = {
 	dotV4_SL = function(vectorA, vectorB)
 		return vectorA[1] * vectorB[1] + vectorA[2] * vectorB[2] + vectorA[3] * vectorB[3] + vectorA[4] * vectorB[4]
 	end,
+	---@endsection
 
+	---@section dotVA_SL
 	---Returns a dot product of 2 vectors.
 	---@param vectorA table is dominant in the size of the dot product
 	---@param vectorB table
@@ -387,28 +438,36 @@ Vectors = {
 		end
 		return dot
 	end,
+	---@endsection
 
+	---@section magnitudeV2_SL
 	---Returns a magnitude of the vector in 2D space.
 	---@param vector table
 	---@return number magnitude
 	magnitudeV2_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2)^0.5
 	end,
+	---@endsection
 
+	---@section magnitudeV3_SL
 	---Returns a magnitude of the vector in 3D space.
 	---@param vector table
 	---@return number magnitude
 	magnitudeV3_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2 + vector[3]^2)^0.5
 	end,
+	---@endsection
 
+	---@section magnitudeV4_SL
 	---Returns a magnitude of the vector in 4D space.
 	---@param vector table
 	---@return number magnitude
 	magnitudeV4_SL = function(vector)
 		return (vector[1]^2 + vector[2]^2 + vector[3]^2 + vector[4]^2)^0.5
 	end,
+	---@endsection
 
+	---@section magnitudeVA_SL
 	---Returns a magnitude of the vector.
 	---@param vector table
 	---@return number magnitude
@@ -419,7 +478,9 @@ Vectors = {
 		end
 		return mag^0.5
 	end,
+	---@endsection
 
+	---@section angleV2_SL
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
@@ -428,7 +489,9 @@ Vectors = {
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV2_SL(vectorA, vectorB) / (Vectors.magnitudeV2_SL(vectorA) * Vectors.magnitudeV2_SL(vectorB) ) ) )
 	end,
+	---@endsection
 
+	---@section angleV3_SL
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
@@ -437,7 +500,9 @@ Vectors = {
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV3_SL(vectorA, vectorB) / (Vectors.magnitudeV3_SL(vectorA) * Vectors.magnitudeV3_SL(vectorB) ) ) )
 	end,
+	---@endsection
 
+	---@section angleV4_SL
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
@@ -446,7 +511,9 @@ Vectors = {
 		--the return below is documented in angleVA_SL
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotV4_SL(vectorA, vectorB) / (Vectors.magnitudeV4_SL(vectorA) * Vectors.magnitudeV4_SL(vectorB) ) ) )
 	end,
+	---@endsection
 
+	---@section angleVA_SL
 	---Returns an angle between 2 vectors in radians.
 	---@param vectorA table
 	---@param vectorB table
@@ -456,14 +523,17 @@ Vectors = {
 		--dot = Vectors.dotVA_SL(vectorA, vectorB)
 		--magA = Vectors.magnitudeVA_SL(vectorA)
 		--magB = Vectors.magnitudeVA_SL(vectorB)
-		--angle = dot / (magA * magB)
-		--angle = math.acos(StormSL.clamp_SL(-1, 1, angle))
+		--angle = dot / (magA * magB) --wikipedia equation
+		--angle = math.acos(StormSL.clamp_SL(-1, 1, angle)) --clamp for safety, sometimes the calculation can be out of acos bounds
+		--return angle
 		return math.acos(StormSL.clamp_SL(-1, 1, Vectors.dotVA_SL(vectorA, vectorB) / (Vectors.magnitudeVA_SL(vectorA) * Vectors.magnitudeVA_SL(vectorB) ) ) )
 	end,
+	---@endsection
 
 
 
 
+	---@section scaleV2Q_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param scalar number
@@ -477,7 +547,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV2_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param scalar number
@@ -493,7 +565,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV2S_SL
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
@@ -504,7 +578,9 @@ Vectors = {
 			vector[2] * scalar
 		}
 	end,
+	---@endsection
 
+	---@section scaleV3Q_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param scalar number
@@ -519,7 +595,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV3_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param scalar number
@@ -536,7 +614,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV3S_SL
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
@@ -548,7 +628,9 @@ Vectors = {
 			vector[3] * scalar
 		}
 	end,
+	---@endsection
 
+	---@section scaleV4Q_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param scalar number
@@ -564,7 +646,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV4_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param scalar number
@@ -582,7 +666,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleV4S_SL
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
@@ -595,7 +681,9 @@ Vectors = {
 			vector[4] * scalar
 		}
 	end,
+	---@endsection
 
+	---@section scaleVAQ_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param scalar number
@@ -613,7 +701,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section scaleVA_SL
 	---A quick vector scaling, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param scalar number
@@ -628,7 +718,9 @@ Vectors = {
 
 		return Vectors.pruneVA_SL(outputVector, #vector)
 	end,
+	---@endsection
 
+	---@section scaleVAS_SL
 	---A smaller variant of scaling vectors.
 	---@param vector table
 	---@param scalar number
@@ -642,7 +734,9 @@ Vectors = {
 
 		return newVec
 	end,
+	---@endsection
 
+	---@section unitV2Q_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
@@ -659,7 +753,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section unitV2_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
@@ -671,7 +767,9 @@ Vectors = {
 
 		return Vectors.scaleV2Q_SL(vector, 1 / magnitude, outputVector)
 	end,
+	---@endsection
 
+	---@section unitV2S_SL
 	---A smaller variant of normalizing vectors.
 	---@param vector table
 	---@return table vector
@@ -681,7 +779,9 @@ Vectors = {
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		return Vectors.scaleV2S_SL(vector, 1 / (magnitude == 0 and 1 or magnitude))
 	end,
+	---@endsection
 
+	---@section unitV3Q_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
@@ -699,7 +799,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section unitV3_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
@@ -711,7 +813,9 @@ Vectors = {
 
 		return Vectors.scaleV3Q_SL(vector, 1 / magnitude, outputVector)
 	end,
+	---@endsection
 
+	---@section unitV3S_SL
 	---A smaller variant of normalizing vectors.
 	---@param vector table
 	---@return table vector
@@ -721,7 +825,9 @@ Vectors = {
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		return Vectors.scaleV3S_SL(vector, 1 / (magnitude == 0 and 1 or magnitude))
 	end,
+	---@endsection
 
+	---@section unitV4Q_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param outputVector table?
@@ -740,7 +846,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section unitV4_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
@@ -752,7 +860,9 @@ Vectors = {
 
 		return Vectors.scaleV4Q_SL(vector, 1 / magnitude, outputVector)
 	end,
+	---@endsection
 
+	---@section unitV4S_SL
 	---A smaller variant of normalizing vectors.
 	---@param vector table
 	---@return table vector
@@ -762,7 +872,9 @@ Vectors = {
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		return Vectors.scaleV4S_SL(vector, 1 / (magnitude == 0 and 1 or magnitude))
 	end,
+	---@endsection
 
+	---@section unitVAQ_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector.
 	---@param vector table
 	---@param outputVector table?
@@ -786,7 +898,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section unitVA_SL
 	---A quick vector normalization, by giving it output vector, you avoid garbage collector. Uses other functions instead of inlining.
 	---@param vector table
 	---@param outputVector table?
@@ -798,7 +912,9 @@ Vectors = {
 
 		return Vectors.scaleVAQ_SL(vector, 1 / magnitude, outputVector)
 	end,
+	---@endsection
 
+	---@section unitVAS_SL
 	---A smaller variant of normalizing vectors.
 	---@param vector table
 	---@return table vector
@@ -808,10 +924,12 @@ Vectors = {
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		return Vectors.scaleVAS_SL(vector, 1 / (magnitude == 0 and 1 or magnitude))
 	end,
+	---@endsection
 
 
 
 
+	---@section addV2Q_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -825,7 +943,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addV2_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -839,7 +959,9 @@ Vectors = {
 			vectorA[2] + vectorB[2]
 		)
 	end,
+	---@endsection
 
+	---@section addV2S_SL
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -850,7 +972,9 @@ Vectors = {
 			vectorA[2] + vectorB[2]
 		}
 	end,
+	---@endsection
 
+	---@section addV3Q_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -865,7 +989,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addV3_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -880,7 +1006,9 @@ Vectors = {
 			vectorA[3] + vectorB[3]
 		)
 	end,
+	---@endsection
 
+	---@section addV3S_SL
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -892,7 +1020,9 @@ Vectors = {
 			vectorA[3] + vectorB[3]
 		}
 	end,
+	---@endsection
 
+	---@section addV4Q_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -908,7 +1038,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addV4_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -924,7 +1056,9 @@ Vectors = {
 			vectorA[4] + vectorB[4]
 		)
 	end,
+	---@endsection
 
+	---@section addV4S_SL
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -937,7 +1071,9 @@ Vectors = {
 			vectorA[4] + vectorB[4]
 		}
 	end,
+	---@endsection
 
+	---@section addVAQ_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -955,7 +1091,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addVA_SL
 	---A quick add vector, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -970,7 +1108,9 @@ Vectors = {
 
 		return Vectors.pruneVA_SL(outputVector,#vectorA)
 	end,
+	---@endsection
 
+	---@section addVAS_SL
 	---A smaller variant of adding vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -984,7 +1124,9 @@ Vectors = {
 
 		return newVec
 	end,
+	---@endsection
 
+	---@section subV2Q_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -998,7 +1140,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section subV2_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1012,7 +1156,9 @@ Vectors = {
 			vectorA[2] - vectorB[2]
 		)
 	end,
+	---@endsection
 
+	---@section subV2S_SL
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1023,7 +1169,9 @@ Vectors = {
 			vectorA[2] - vectorB[2]
 		}
 	end,
+	---@endsection
 
+	---@section subV3Q_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1038,7 +1186,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section subV3_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1053,7 +1203,9 @@ Vectors = {
 			vectorA[3] - vectorB[3]
 		)
 	end,
+	---@endsection
 
+	---@section subV3S_SL
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1065,7 +1217,9 @@ Vectors = {
 			vectorA[3] - vectorB[3]
 		}
 	end,
+	---@endsection
 
+	---@section subV4Q_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1081,7 +1235,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section subV4_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1097,7 +1253,9 @@ Vectors = {
 			vectorA[4] - vectorB[4]
 		)
 	end,
+	---@endsection
 
+	---@section subV4S_SL
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1110,7 +1268,9 @@ Vectors = {
 			vectorA[4] - vectorB[4]
 		}
 	end,
+	---@endsection
 
+	---@section subVAQ_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1128,7 +1288,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section subVA_SL
 	---A quick sub, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1142,7 +1304,9 @@ Vectors = {
 		end
 		return Vectors.pruneVA_SL(outputVector, #vectorA)
 	end,
+	---@endsection
 
+	---@section subVAS_SL
 	---A smaller variant of subracting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1156,7 +1320,9 @@ Vectors = {
 
 		return newVec
 	end,
+	---@endsection
 
+	---@section addMultV2Q_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1171,7 +1337,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addMultV2_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1186,7 +1354,9 @@ Vectors = {
 			vectorA[2] + scalarForB * vectorB[2]
 		)
 	end,
+	---@endsection
 
+	---@section addMultV2S_SL
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
@@ -1198,7 +1368,9 @@ Vectors = {
 			vectorA[2] + scalarForB * vectorB[2]
 		}
 	end,
+	---@endsection
 
+	---@section addMultV3Q_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1214,7 +1386,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addMultV3_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1230,7 +1404,9 @@ Vectors = {
 			vectorA[3] + scalarForB * vectorB[3]
 		)
 	end,
+	---@endsection
 
+	---@section addMultV3S_SL
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
@@ -1243,7 +1419,9 @@ Vectors = {
 			vectorA[3] + scalarForB * vectorB[3]
 		}
 	end,
+	---@endsection
 
+	---@section addMultV4Q_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1260,7 +1438,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addMultV4_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1277,7 +1457,9 @@ Vectors = {
 			vectorA[4] + scalarForB * vectorB[4]
 		)
 	end,
+	---@endsection
 
+	---@section addMultV4S_SL
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
@@ -1291,7 +1473,9 @@ Vectors = {
 			vectorA[4] + scalarForB * vectorB[4]
 		}
 	end,
+	---@endsection
 
+	---@section addMultVAQ_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1310,7 +1494,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section addMultVA_SL
 	---A quick add multiply, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1326,7 +1512,9 @@ Vectors = {
 
 		return Vectors.pruneVA_SL(outputVector, #vectorA)
 	end,
+	---@endsection
 
+	---@section addMultVAS_SL
 	---A smaller variant of vector add multiply.
 	---@param vectorA table
 	---@param vectorB table
@@ -1341,7 +1529,9 @@ Vectors = {
 
 		return newVec
 	end,
+	---@endsection
 
+	---@section crossV3Q_SL
 	---A quick cross product, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1356,7 +1546,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section crossV3_SL
 	---A quick cross product, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1371,7 +1563,9 @@ Vectors = {
 			vectorA[1] * vectorB[2] - vectorA[2] * vectorB[1]
 		)
 	end,
+	---@endsection
 
+	---@section crossV3S_SL
 	---A smaller variant of cross product.
 	---@param vectorA table
 	---@param vectorB table
@@ -1383,7 +1577,9 @@ Vectors = {
 			vectorA[1] * vectorB[2] - vectorA[2] * vectorB[1]
 		}
 	end,
+	---@endsection
 
+	---@section projectV2Q_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1402,7 +1598,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV2_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1422,7 +1620,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV2S_SL
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1432,7 +1632,9 @@ Vectors = {
 			Vectors.dotV2_SL(vectorA, vectorB) / Vectors.dotV2_SL(vectorB,vectorB)
 		)
 	end,
+	---@endsection
 
+	---@section projectV3Q_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1452,7 +1654,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV3_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1472,7 +1676,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV3S_SL
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1482,7 +1688,9 @@ Vectors = {
 			Vectors.dotV3_SL(vectorA, vectorB) / Vectors.dotV3_SL(vectorB,vectorB)
 		)
 	end,
+	---@endsection
 
+	---@section projectV4Q_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1503,7 +1711,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV4_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1523,7 +1733,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectV4S_SL
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1533,7 +1745,9 @@ Vectors = {
 			Vectors.dotV4_SL(vectorA, vectorB) / Vectors.dotV4_SL(vectorB,vectorB)
 		)
 	end,
+	---@endsection
 
+	---@section projectVAQ_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1558,7 +1772,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectVA_SL
 	---Projects vector A onto vector B, by giving it output vector, you avoid garbage collector. Uses function instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1578,7 +1794,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section projectVAS_SL
 	---A smaller variant of projecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1588,7 +1806,9 @@ Vectors = {
 			Vectors.dotVA_SL(vectorA, vectorB) / Vectors.dotVA_SL(vectorB,vectorB)
 		)
 	end,
+	---@endsection
 
+	---@section rejectV2Q_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1607,7 +1827,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV2_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1624,7 +1846,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV2S_SL
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1632,7 +1856,9 @@ Vectors = {
 	rejectV2S_SL = function(vectorA, vectorB)
 		return Vectors.subV2S_SL(vectorA, Vectors.projectV2S_SL(vectorA, vectorB) )
 	end,
+	---@endsection
 
+	---@section rejectV3Q_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1652,7 +1878,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV3_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1662,14 +1890,16 @@ Vectors = {
 		outputVector = outputVector or {}
 
 		--safeguard for when A and out are the same reference
-		vectorA = outputVector == vectorA and Vectors.copyV2_SL(vectorA) or vectorA
+		vectorA = outputVector == vectorA and Vectors.copyV3_SL(vectorA) or vectorA
 
 		Vectors.projectV3Q_SL(vectorA, vectorB, outputVector)
 		Vectors.subV3Q_SL(vectorA, outputVector, outputVector)
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV3S_SL
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1677,7 +1907,9 @@ Vectors = {
 	rejectV3S_SL = function(vectorA, vectorB)
 		return Vectors.subV3_SL(vectorA, Vectors.projectV3_SL(vectorA, vectorB) )
 	end,
+	---@endsection
 
+	---@section rejectV4Q_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1698,7 +1930,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV4_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1708,14 +1942,16 @@ Vectors = {
 		outputVector = outputVector or {}
 
 		--safeguard for when A and out are the same reference
-		vectorA = outputVector == vectorA and Vectors.copyV2_SL(vectorA) or vectorA
+		vectorA = outputVector == vectorA and Vectors.copyV4_SL(vectorA) or vectorA
 
 		Vectors.projectV4Q_SL(vectorA, vectorB, outputVector)
 		Vectors.subV4Q_SL(vectorA, outputVector, outputVector)
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectV4S_SL
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1723,7 +1959,9 @@ Vectors = {
 	rejectV4S_SL = function(vectorA, vectorB)
 		return Vectors.subV4S_SL(vectorA, Vectors.projectV4S_SL(vectorA, vectorB) )
 	end,
+	---@endsection
 
+	---@section rejectVAQ_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1748,7 +1986,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectVA_SL
 	---Rejects vector A from vector B, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1758,14 +1998,16 @@ Vectors = {
 		outputVector = outputVector or {}
 
 		--safeguard for when A and out are the same reference
-		vectorA = outputVector == vectorA and Vectors.copyV2_SL(vectorA) or vectorA
+		vectorA = outputVector == vectorA and Vectors.copyVA_SL(vectorA) or vectorA
 
 		Vectors.projectV4Q_SL(vectorA, vectorB, outputVector)
 		Vectors.subV4Q_SL(vectorA, outputVector, outputVector)
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section rejectVAS_SL
 	---A smaller variant of rejecting vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1773,7 +2015,9 @@ Vectors = {
 	rejectVAS_SL = function(vectorA, vectorB)
 		return Vectors.subV4S_SL(vectorA, Vectors.projectV4S_SL(vectorA, vectorB) )
 	end,
+	---@endsection
 
+	---@section lerpV2Q_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1788,7 +2032,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV2_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1804,7 +2050,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV2S_SL
 	---A smaller variant of lerping vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1816,7 +2064,9 @@ Vectors = {
 			Vectors.scaleV2S_SL(vectorB, t)
 		)
 	end,
+	---@endsection
 
+	---@section lerpV3Q_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1832,7 +2082,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV3_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1848,7 +2100,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV3S_SL
 	---A smaller variant of lerping vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1860,7 +2114,9 @@ Vectors = {
 			Vectors.scaleV3S_SL(vectorB, t)
 		)
 	end,
+	---@endsection
 
+	---@section lerpV4Q_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1877,7 +2133,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV4_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1893,7 +2151,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpV4S_SL
 	---A smaller variant of lerping vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1905,7 +2165,9 @@ Vectors = {
 			Vectors.scaleV4S_SL(vectorB, t)
 		)
 	end,
+	---@endsection
 
+	---@section lerpVAQ_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vectorA table
 	---@param vectorB table
@@ -1924,7 +2186,9 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpVA_SL
 	---A quick lerp, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vectorA table
 	---@param vectorB table
@@ -1940,7 +2204,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section lerpVAS_SL
 	---A smaller variant of lerping vectors.
 	---@param vectorA table
 	---@param vectorB table
@@ -1952,7 +2218,9 @@ Vectors = {
 			Vectors.scaleVAS_SL(vectorB, t)
 		)
 	end,
+	---@endsection
 
+	---@section matMultV2Q_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param matrix table
@@ -1971,7 +2239,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section matMultV2_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param matrix table
@@ -1990,7 +2260,9 @@ Vectors = {
 			row2[1]*v1 + row2[2]*v2
 		)
 	end,
+	---@endsection
 
+	---@section matMultV2S_SL
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
@@ -2007,7 +2279,9 @@ Vectors = {
 			row2[1]*v1 + row2[2]*v2
 		}
 	end,
+	---@endsection
 
+	---@section matMultV3Q_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param matrix table
@@ -2029,7 +2303,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section matMultV3_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param matrix table
@@ -2051,7 +2327,9 @@ Vectors = {
 			row3[1]*v1 + row3[2]*v2 + row3[3]*v3
 		)
 	end,
+	---@endsection
 
+	---@section matMultV3S_SL
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
@@ -2071,7 +2349,9 @@ Vectors = {
 			row3[1]*v1 + row3[2]*v2 + row3[3]*v3
 		}
 	end,
+	---@endsection
 
+	---@section matMultV4Q_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param matrix table
@@ -2096,7 +2376,9 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 
+	---@section matMultV4_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses functions instead of inlining.
 	---@param vector table
 	---@param matrix table
@@ -2121,7 +2403,9 @@ Vectors = {
 			row4[1]*v1 + row4[2]*v2 + row4[3]*v3 + row4[4]*v4
 		)
 	end,
+	---@endsection
 
+	---@section matMultV4S_SL
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
@@ -2149,7 +2433,9 @@ Vectors = {
 			row4[1]*v1 + row4[2]*v2 + row4[3]*v3 + row4[4]*v4
 		}
 	end,
+	---@endsection
 
+	---@section matMultVAQ_SL
 	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector. Uses inlined operations.
 	---@param vector table
 	---@param matrix table
@@ -2158,7 +2444,7 @@ Vectors = {
 	matMultVAQ_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 
-		vector = outputVector == vector and Vectors.copyV2_SL(vector) or vector
+		vector = outputVector == vector and {unpack_SL(vector)} or vector
 
 		for i, row in ipairs_SL(matrix) do
 			local v = 0
@@ -2173,7 +2459,33 @@ Vectors = {
 		end
 		return outputVector
 	end,
+	---@endsection
 
+	---@section matMultVA_SL
+	---A quick vector matrix multiplication, by giving it output vector, you avoid garbage collector.
+	---@param vector table
+	---@param matrix table
+	---@param outputVector table?
+	---@return table vector
+	matMultVA_SL = function(vector, matrix, outputVector)
+		outputVector = outputVector or {}
+
+		vector = outputVector == vector and Vectors.copyVA_SL(vector) or vector
+
+		for i, row in ipairs_SL(matrix) do
+			local v = 0
+			for j, weight in ipairs_SL(row) do
+				v = v + weight * vector[j]
+			end
+			outputVector[i] = v
+		end
+
+		
+		return Vectors.pruneVA_SL(vectorToChange, #vectorToCopyFrom)
+	end,
+	---@endsection
+
+	---@section matMultVAS_SL
 	---A smaller variant of vector matrix multiplication.
 	---@param vector table
 	---@param matrix table
@@ -2191,6 +2503,15 @@ Vectors = {
 
 		return outputVector
 	end,
+	---@endsection
 }
 
 StormSL.Vectors = Vectors
+---@endsection STORMSL_VECTORS_CLASS
+
+
+
+
+---@section __LB_SIMULATOR_ONLY_STORMSL_VECTORS_END__
+end
+---@endsection
