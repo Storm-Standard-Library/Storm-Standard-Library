@@ -558,12 +558,10 @@ Vectors = {
 	scaleV2_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
-		Vectors.setV2_SL(outputVector,
+		return Vectors.setV2_SL(outputVector,
 			vector[1] * scalar,
 			vector[2] * scalar
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -606,13 +604,11 @@ Vectors = {
 	scaleV3_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
-		Vectors.setV3_SL(outputVector,
+		return Vectors.setV3_SL(outputVector,
 			vector[1] * scalar,
 			vector[2] * scalar,
 			vector[3] * scalar
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -657,14 +653,12 @@ Vectors = {
 	scaleV4_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
-		Vectors.setV4_SL(outputVector,
+		return Vectors.setV4_SL(outputVector,
 			vector[1] * scalar,
 			vector[2] * scalar,
 			vector[3] * scalar,
 			vector[4] * scalar
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -1612,13 +1606,11 @@ Vectors = {
 		--computed early in case A and out are same reference
 		local dotAB = Vectors.dotV2_SL(vectorA, vectorB)
 		Vectors.setToV2_SL(outputVector, vectorB)
-		Vectors.scaleV2Q_SL(
+		return Vectors.scaleV2Q_SL(
 			outputVector,
 			dotAB / Vectors.dotV2_SL(vectorB,vectorB),
 			outputVector
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -1668,13 +1660,11 @@ Vectors = {
 		--computed early in case A and out are same reference
 		local dotAB = Vectors.dotV3_SL(vectorA, vectorB)
 		Vectors.setToV3_SL(outputVector, vectorB)
-		Vectors.scaleV3Q_SL(
+		return Vectors.scaleV3Q_SL(
 			outputVector,
 			dotAB / Vectors.dotV3_SL(vectorB,vectorB),
 			outputVector
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -1725,13 +1715,11 @@ Vectors = {
 		--computed early in case A and out are same reference
 		local dotAB = Vectors.dotV4_SL(vectorA, vectorB)
 		Vectors.setToV4_SL(outputVector, vectorB)
-		Vectors.scaleV4Q_SL(
+		return Vectors.scaleV4Q_SL(
 			outputVector,
 			dotAB / Vectors.dotV4_SL(vectorB,vectorB),
 			outputVector
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -1786,13 +1774,11 @@ Vectors = {
 		--computed early in case A and out are same reference
 		local dotAB = Vectors.dotVA_SL(vectorA, vectorB)
 		Vectors.setToVA_SL(outputVector, vectorB)
-		Vectors.scaleVAQ_SL(
+		return Vectors.scaleVAQ_SL(
 			outputVector,
 			dotAB / Vectors.dotVA_SL(vectorB,vectorB),
 			outputVector
 		)
-
-		return outputVector
 	end,
 	---@endsection
 
@@ -1841,10 +1827,8 @@ Vectors = {
 		--safeguard for when A and out are the same reference
 		vectorA = outputVector == vectorA and Vectors.copyV2_SL(vectorA) or vectorA
 
-		Vectors.projectV2Q_SL(vectorA, vectorB, outputVector)
-		Vectors.subV2Q_SL(vectorA, outputVector, outputVector)
-
-		return outputVector
+		Vectors.projectV2_SL(vectorA, vectorB, outputVector)
+		return Vectors.subV2_SL(vectorA, outputVector, outputVector)
 	end,
 	---@endsection
 
@@ -1892,10 +1876,8 @@ Vectors = {
 		--safeguard for when A and out are the same reference
 		vectorA = outputVector == vectorA and Vectors.copyV3_SL(vectorA) or vectorA
 
-		Vectors.projectV3Q_SL(vectorA, vectorB, outputVector)
-		Vectors.subV3Q_SL(vectorA, outputVector, outputVector)
-
-		return outputVector
+		Vectors.projectV3_SL(vectorA, vectorB, outputVector)
+		return Vectors.subV3_SL(vectorA, outputVector, outputVector)
 	end,
 	---@endsection
 
@@ -1944,10 +1926,8 @@ Vectors = {
 		--safeguard for when A and out are the same reference
 		vectorA = outputVector == vectorA and Vectors.copyV4_SL(vectorA) or vectorA
 
-		Vectors.projectV4Q_SL(vectorA, vectorB, outputVector)
-		Vectors.subV4Q_SL(vectorA, outputVector, outputVector)
-
-		return outputVector
+		Vectors.projectV4_SL(vectorA, vectorB, outputVector)
+		return Vectors.subV4_SL(vectorA, outputVector, outputVector)
 	end,
 	---@endsection
 
@@ -2000,10 +1980,8 @@ Vectors = {
 		--safeguard for when A and out are the same reference
 		vectorA = outputVector == vectorA and Vectors.copyVA_SL(vectorA) or vectorA
 
-		Vectors.projectV4Q_SL(vectorA, vectorB, outputVector)
-		Vectors.subV4Q_SL(vectorA, outputVector, outputVector)
-
-		return outputVector
+		Vectors.projectV4_SL(vectorA, vectorB, outputVector)
+		return Vectors.subV4_SL(vectorA, outputVector, outputVector)
 	end,
 	---@endsection
 
@@ -2044,11 +2022,9 @@ Vectors = {
 	lerpV2_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
-		vectorB = Vectors.scaleV2Q_SL(vectorB, t) --necessitates a garbage creation
-		Vectors.scaleV2Q_SL(vectorA, 1-t, outputVector)
-		Vectors.addV2Q_SL(outputVector, vectorB, outputVector)
-
-		return outputVector
+		vectorB = Vectors.scaleV2_SL(vectorB, t) --necessitates a garbage creation
+		Vectors.scaleV2_SL(vectorA, 1-t, outputVector)
+		return Vectors.addV2_SL(outputVector, vectorB, outputVector)
 	end,
 	---@endsection
 
@@ -2094,11 +2070,9 @@ Vectors = {
 	lerpV3_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
-		vectorB = Vectors.scaleV3Q_SL(vectorB, t) --necessitates a garbage creation
-		Vectors.scaleV3Q_SL(vectorA, 1-t, outputVector)
-		Vectors.addV3Q_SL(outputVector, vectorB, outputVector)
-
-		return outputVector
+		vectorB = Vectors.scaleV3_SL(vectorB, t) --necessitates a garbage creation
+		Vectors.scaleV3_SL(vectorA, 1-t, outputVector)
+		return Vectors.addV3_SL(outputVector, vectorB, outputVector)
 	end,
 	---@endsection
 
@@ -2145,11 +2119,9 @@ Vectors = {
 	lerpV4_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
-		vectorB = Vectors.scaleV4Q_SL(vectorB, t) --necessitates a garbage creation
-		Vectors.scaleV4Q_SL(vectorA, 1-t, outputVector)
-		Vectors.addV4Q_SL(outputVector, vectorB, outputVector)
-
-		return outputVector
+		vectorB = Vectors.scaleV4_SL(vectorB, t) --necessitates a garbage creation
+		Vectors.scaleV4_SL(vectorA, 1-t, outputVector)
+		return Vectors.addV4_SL(outputVector, vectorB, outputVector)
 	end,
 	---@endsection
 
@@ -2198,11 +2170,9 @@ Vectors = {
 	lerpVA_SL = function(vectorA, vectorB, t, outputVector)
 		outputVector = outputVector or {}
 
-		vectorB = Vectors.scaleVAQ_SL(vectorB, t) --necessitates a garbage creation
-		Vectors.scaleVAQ_SL(vectorA, 1-t, outputVector)
-		Vectors.addVAQ_SL(outputVector, vectorB, outputVector)
-
-		return outputVector
+		vectorB = Vectors.scaleVA_SL(vectorB, t) --necessitates a garbage creation
+		Vectors.scaleVA_SL(vectorA, 1-t, outputVector)
+		return Vectors.addVA_SL(outputVector, vectorB, outputVector)
 	end,
 	---@endsection
 
@@ -2470,7 +2440,7 @@ Vectors = {
 	matMultVA_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 
-		vector = outputVector == vector and Vectors.copyVA_SL(vector) or vector
+		vector = outputVector == vector and {unpack_SL(vector)} or vector
 
 		for i, row in ipairs_SL(matrix) do
 			local v = 0
