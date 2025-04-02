@@ -34,15 +34,30 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field xorShift64_SL fun(int64:integer):integer
 	---@field xorShift32_SL fun(int32:integer):integer
 	---@field xorShift_SL fun(int:integer, l1:integer, r2:integer, l3:integer):integer
+	---@field xoshiro256ss_SL fun(seed0:integer, seed1:integer, seed2:integer, seed3:integer):integer,integer,integer,integer,integer
 	---@field createRngClosure_SL fun(seed:integer?, boundLow:number?, boundHigh:number?, integerMode:boolean?):fun(newSeed:integer?):number
 	---@field createRngClass_SL fun(seed:integer?, boundLow:number?, boundHigh:number?, integerMode:boolean?):table
+	---@field getIntMask_SL fun(maskBits:integer, shift:integer?):integer
+	---@field getNextPower2SignedInt_SL fun(integer:integer):integer
+	---@field getNextPower2UnsignedInt_SL fun(integer:integer):integer
+	---@field getPower2Float_SL fun(float:number):number
+	---@field getPower2Exponent_SL fun(float:number):integer
 	---@field stringToWordTable_SL fun(string:string):table
 	---@field getAverage_SL fun(...:number):number
-	---@field Vector table Vector---The standard library for Stormworks Lua.
+	---@field printIntRepresentation_SL fun(integer:integer,...:any):nil
+	---@field cache_SL table
+	---@field Vectors table
+	---@field Matrices table
 	---The standard library for Stormworks Lua.
 	StormSL = {
 		---@section version_SL
 		version_SL='0.0.0',
+		---@endsection
+
+		---@section cache_SL
+		---@type table
+		---To not be used. Is for internal usage to store repeated data for speedups.
+		cache_SL = {},
 		---@endsection
 
 		---@section clamp_SL
@@ -404,6 +419,31 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
+		---@section xoshiro256ss_SL
+		---Very large and pretty advanced pseudoRNG. Is only marginally better than 64 bit xorshift, so consider using that, but this guy also has extremely long period.
+		---@param seed0 integer
+		---@param seed1 integer
+		---@param seed2 integer
+		---@param seed3 integer
+		---@return integer result
+		---@return integer seed0
+		---@return integer seed1
+		---@return integer seed2
+		---@return integer seed3
+		xoshiro256ss_SL = function(seed0, seed1, seed2, seed3)
+			--inlined roll
+			local result, t = ( (seed1 * 5 << 7) | (seed1 * 5 >> 57) ) * 9, seed1 << 17
+			seed2 = seed2 ~ seed0
+			seed3 = seed3 ~ seed1
+			seed1 = seed1 ~ seed2
+			seed0 = seed0 ~ seed3
+			seed2 = seed2 ~ t
+			--inlined roll
+			seed3 = (seed3 << 45) | (seed3 >> 19)
+			return result, seed0, seed1, seed2, seed3
+		end,
+		---@endsection
+
 		---@section createRngClosure_SL
 		---Creates a random number generator closure. Uses xorShift64 masked to middle 32 bits.
 		---@param seed integer?
@@ -461,6 +501,71 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
+		---@section getIntMask_SL
+		---Will return an 64 bit integer mask of specified size and shifted left by specified amount.
+		---@param maskBits integer the number of 1s in the mask
+		---@param shift integer? optional argument to how many least signifact zeroes there should be
+		---@return integer mask
+		getIntMask_SL = function(maskBits, shift)
+			maskBits = maskBits >= 64 and -1 or maskBits<54 and 2^maskBits-1 or 2^maskBits-1024
+			return (maskBits | (maskBits >> 12) ) << (shift or 0)--doubles will drop least significant 11 bits, +1 because I'm paranoid
+		end,
+		---@endsection
+
+		---@section getNextPower2SignedInt_SL
+		---will return an integer larger or equal in absolute value compared to input integer, and the output will be an exact power of 2 or 0
+		---@param integer integer
+		---@return integer power2
+		getNextPower2SignedInt_SL = function(integer)
+			local power = math.abs(integer) - 1
+			power = power | (power >> 1)
+			power = power | (power >> 2)
+			power = power | (power >> 4)
+			power = power | (power >> 8)
+			power = power | (power >> 16)
+			return integer == 0 and 0 or (integer < 0 and -1 or 1) * (power | (power >> 32) + 1)
+		end,
+
+		---@section getNextPower2UnsignedInt_SL
+		---will return an integer larger or equal integer, and the output will be an exact power of 2. Returns -1 for negative inputs.
+		---@param integer integer
+		---@return integer power2
+		getNextPower2UnsignedInt_SL = function(integer)
+			integer = integer | (integer >> 1)
+			integer = integer | (integer >> 2)
+			integer = integer | (integer >> 4)
+			integer = integer | (integer >> 8)
+			integer = integer | (integer >> 16)
+			return integer | (integer >> 32) + 1
+		end,
+		---@endsection
+
+		---@section getPower2Float_SL
+		---Will accept and return a floating point. Returns the next closest or equal power of two while maintaining the sign. May return an infinity for extremely large values. 
+		---@param float number
+		---@return number power2
+		getPower2Float_SL = function(float)
+			local binary = ('i8'):unpack( ('d'):pack(float) )
+			local exponentAndSign, mantissa = binary >> 52, binary & 0xFFFFFFFFFFFFF
+			--infinities and nans
+			if exponentAndSign & 2047 == 2047 then
+				return float
+			end
+			exponentAndSign = mantissa ~= 0 and exponentAndSign + 1 or exponentAndSign
+			--extra parentheses to only return 1 value
+			return ( ('d'):unpack( ('i8'):pack(exponentAndSign << 52) ) )
+		end,
+		---@endsection
+
+		---@section getPower2Exponent_SL
+		---Returns the rounded down exponent of a number, presumably floating point. It is in fact the exact exponent value of a floating point number.
+		---@param float number
+		---@return integer exponent
+		getPower2Exponent_SL = function(float)
+			return ( ( ('i8'):unpack( ('d'):pack(float) ) >> 52) & 2047) - 1023
+		end,
+		---@endsection
+
 		---@section stringToWordTable_SL
 		---Cuts the string into words based on whitespace and returns a table of strings.
 		---@param string string
@@ -486,13 +591,26 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 			return sum / #inputs
 		end,
 		---@endsection
+
+		---@section printIntRepresentation_SL
+		---Prints a binary representation of an integer
+		---@param integer integer
+		---@param ... any
+		printIntRepresentation_SL = function(integer, ...)
+			local text = ''
+			for i = 0, 63 do
+				text=( (integer >> i) & 1) .. text
+			end
+			print(text, ...)
+		end,
+		---@endsection
 	}
 
 	--again using upvalues for internal speedups as those end up being upvalues
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
 	local Vectors, Matrix
 	require('Modules.Vectors')
-	require('StormSL.Matrix') --unimplemented!
+	require('Modules.Matrices')
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table
