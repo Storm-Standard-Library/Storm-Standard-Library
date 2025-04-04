@@ -8,7 +8,21 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Bitformat
 
 ---@section Bitformatting 1 STORMSL_BITFORMATTING_CLASS
 ---@class Bitformatting
----@field uint32ToChannel_SL fun(uint32:integer,channel:integer):nil
+---@field uint32ToChannel_SL fun(channel:integer,uint32:integer):nil
+---@field channelToUint32_SL fun(channel:integer):integer
+---@field fourBytesToChannel_SL fun(channel:integer,byte0:integer,byte1:integer,byte2:integer,byte3:integer):nil
+---@field channelToFourBytes_SL fun(channel:integer):integer,integer,integer,integer
+---@field floatToInt_SL fun(float:number,bits:integer,custom_exponentBits:integer?,custom_shift:integer?,custom_unsigned:boolean?,custom_forceDouble:boolean?,custom_disableDouble:boolean?,custom_roundAwayFrom0:boolean?,custom_roundToward0:boolean?):integer
+---@field intToFloat_SL fun(int:integer,bits:integer,custom_exponentBits:integer?,custom_shift:integer?,custom_unsigned:boolean?,custom_forceDouble:boolean?,custom_disableDouble:boolean?):number
+---@field fixedTableEncode_SL fun(int:integer,bits:integer,count:integer,outputTable:table?):table
+---@field fixedTableDecode_SL fun(tab:table,bits:integer,count:integer,index:integer?):integer,integer
+---@field variableTableEncode_SL fun(int:integer,bits:integer,out:table?):table
+---@field variableTableDecode_SL fun(tab:table,bits:integer,index:integer?):integer,integer
+---@field sixBitTableToString_SL fun(tab:table,startIndex:integer?,endIndex:integer?):string
+---@field stringToSixBitTable_SL fun(str:string,startChar:integer?,endChar:integer?):table
+---@field transcribeTableBits_SL fun(tab:table,bitsIn:integer,bitsOut:integer,totalOutputValues:integer?,index:integer?):table
+---@field flattenTable_SL fun(tab:table):table
+---@field unflattenTable_SL fun(flat:table):table
 ---Standard Stormworks Vector functions
 Bitformatting = {
 	---@section uint32ToChannel_SL
@@ -278,10 +292,12 @@ Bitformatting = {
 	---@section sixBitTableToString_SL
 	---Changes a table into a string on the presumption that it's arraylike and that every entry inside is an integer between 0 and 63
 	---@param tab table
+	---@param startIndex integer? defaults to 1, the position from which to start encoding, inclusive
+	---@param endIndex integer? default to #tab, the position at which encoding ends, inclusive
 	---@return string str
-	sixBitTableToString_SL = function(tab)
+	sixBitTableToString_SL = function(tab, startIndex, endIndex)
 		local t2, value = {}
-		for index = 1, #tab do
+		for index = startIndex or 1, endIndex or #tab do
 			value = tab[index] + 40
 			t2[index] = value > 90 and value + 6 or value
 		end
@@ -292,12 +308,15 @@ Bitformatting = {
 	---@section stringToSixBitTable_SL
 	---Changes a string into a table with values between 0 and 63
 	---@param str string
+	---@param startChar integer? defaults to 1, the position from which to start encoding, inclusive
+	---@param endChar integer? default to #str, the position at which encoding ends, inclusive
 	---@return tab table
-	stringToSixBitTable_SL = function(str)
+	stringToSixBitTable_SL = function(str, startChar, endChar)
 		local tab, value = {string.byte(str, 1, #str)}
-		for i = 1, #tab do
+		startChar = (startChar or 1) - 1
+		for i = startChar + 1, endChar or #tab do
 			value = tab[i]
-			tab[i] = (value > 90 and value - 6 or value) - 40
+			tab[i - startChar] = (value > 90 and value - 6 or value) - 40
 		end
 		return tab
 	end,
@@ -306,10 +325,10 @@ Bitformatting = {
 	---@section transcribeTableBits_SL
 	---Changes a table with integers lets say 8 bits (bits in) larger into a larger output table with 4 bits (bits out) integers and returns that. Works in any direction but when bringing back, totalOutputValues might be needed to prune the end
 	---@param tab table
-	---@param bitsIn number
-	---@param bitsOut number
-	---@param totalOutputValues number|nil used to trim the end when transcribing back due to edge cases and accidental 0 pads
-	---@param index number|nil defaults to 1, can be used to skip a header or smfn
+	---@param bitsIn integer
+	---@param bitsOut integer
+	---@param totalOutputValues integer? used to trim the end when transcribing back due to edge cases and accidental 0 pads
+	---@param index integer? defaults to 1, can be used to skip a header or smfn
 	---@return table transcribed into different bit size
 	transcribeTableBits_SL=function(tab,bitsIn,bitsOut,totalOutputValues,index)
 		local output, buffer, shift, topValue = {}, 0, 0
