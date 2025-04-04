@@ -39,8 +39,8 @@ Bitformatting = {
 		parity can be used to fix something like a broken subnormal or -0 if these happen to cause issues
 		so far I have not seen any issues so I've simplified to the bare minimum
 		]]
-		output.setNumber(channel, ( ('f'):unpack( ('I'):pack((uint32 & 4278190080) | (uint32 & 8388607)) ) ))
-		output.setBool(channel, uint32 & 8388608 ~= 0)
+		output.setNumber(channel, ( ('f'):unpack( ('I'):pack((uint32 & 0xFF000000) | (uint32 & 0x7FFFFF)) ) ))
+		output.setBool(channel, uint32 & 0x800000 ~= 0)
 	end,
 	---@endsection
 
@@ -49,7 +49,7 @@ Bitformatting = {
 	---@param channel integer channel from which to read the data
 	---@return decoded integer
 	channelToUint32_SL=function(channel)
-		return ( ('I'):unpack( ('f'):pack(input.getNumber(channel)) ) ) | (input.getBool(channel) and 8388608 or 0)
+		return ( ('I'):unpack( ('f'):pack(input.getNumber(channel)) ) ) | (input.getBool(channel) and 0x800000 or 0)
 	end,
 	---@endsection
 
@@ -61,7 +61,9 @@ Bitformatting = {
 	---@param byte2 integer
 	---@param byte3 integer
 	fourBytesToChannel_SL = function(channel, byte0, byte1, byte2, byte3)
-		Bitformatting.uint32ToChannel_SL(channel, byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24))
+		local uint32 = byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24)
+		output.setNumber(channel, ( ('f'):unpack( ('I'):pack((uint32 & 0xFF000000) | (uint32 & 0x7FFFFF)) ) ))
+		output.setBool(channel, uint32 & 0x800000 ~= 0)
 	end,
 	---@endsection
 
@@ -73,7 +75,7 @@ Bitformatting = {
 	---@return integer byte2
 	---@return integer byte3
 	channelToFourBytes_SL = function(channel)
-		local uint32 = Bitformatting.channelToUint32_SL(channel)
+		local uint32 = ( ('I'):unpack( ('f'):pack(input.getNumber(channel)) ) ) | (input.getBool(channel) and 0x800000 or 0)
 		return uint32 & 255, (uint32 >> 8) & 255,  (uint32 >> 16) & 255,  (uint32 >> 24) & 255
 	end,
 
