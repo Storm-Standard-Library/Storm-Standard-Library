@@ -492,7 +492,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
 	local Vectors, Matrices, Bitformatting
 	require('Modules.Vectors')
-	require('StormSL.Matrix') --unimplemented!
+	require('Modules.Matrices')
 	require('Modules.Bitformatting')
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
