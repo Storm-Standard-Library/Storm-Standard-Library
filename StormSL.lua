@@ -16,6 +16,8 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field delta_SL fun(currentValue:number, oldvalue:number):number
 	---@field deltaClass_SL fun(innitialValue:number?):table
 	---@field deltaClosure_SL fun(innitialValue:number?):fun(newValue:number):number
+	---@field getPulseToToggleClosure_SL fun(initialState:boolean?):function
+	---@field getPushToPulseClosure_SL fun(initialState:boolean?):function
 	---@field thresholdEx_SL fun(x:number, min:number, max:number):boolean
 	---@field thresholdInc_SL fun(x:number, min:number, max:number):boolean
 	---@field fixNanTo0_SL fun(value:number):number
@@ -44,12 +46,17 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field getPower2Exponent_SL fun(float:number):integer
 	---@field stringToWordTable_SL fun(string:string):table
 	---@field getAverage_SL fun(...:number):number
+	---@field createStack_SL fun():table
+	---@field createStackUpval_SL fun():table
+	---@field createQueue_SL fun():table
+	---@field createQueueUpval_SL fun():table
 	---@field printIntRepresentation_SL fun(integer:integer,...:any):nil
 	---@field cache_SL table
 	---@field Vectors table
 	---@field Matrices table
 	---The standard library for Stormworks Lua.
 	StormSL = {
+
 		---@section version_SL
 		version_SL='0.0.0',
 		---@endsection
@@ -174,6 +181,37 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				local delta = newValue - innitialValue
 				innitialValue = newValue
 				return delta
+			end
+		end,
+		---@endsection
+
+		---@section getPulseToToggleClosure_SL
+		---Returns a function that will manage your pulse to toggle
+		---@param initialState boolean? the initial state of the switch
+		---@return function
+		getPulseToToggleClosure_SL = function(initialState)
+			---@param boolean boolean
+			---@return boolean toggle
+			return function(boolean)
+				if boolean then
+					initialState = not initialState
+				end
+				return initialState
+			end
+		end,
+		---@endsection
+
+		---@section getPushToPulseClosure_SL
+		---Returns a function that will manage your push to pulse
+		---@param initialState boolean? the initial state of the switch
+		---@return function
+		getPushToPulseClosure_SL = function(initialState)
+			---@param boolean boolean
+			---@return boolean pulse
+			return function(boolean)
+				local pulse = boolean and not initialState
+				initialState = boolean
+				return pulse
 			end
 		end,
 		---@endsection
@@ -353,7 +391,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		simpleCopy_SL = function(tableIn, tableOut, allowOverwrite)
 			tableOut = tableOut or {}
 			local disableOverwrite = not allowOverwrite
-			for key,copiedValue in pairs_SL(tableIn) do
+			for key, copiedValue in pairs_SL(tableIn) do
 				tableOut[key] = disableOverwrite and tableOut[key] or copiedValue
 			end
 			return tableOut
@@ -592,6 +630,233 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
+		---@section createStack_SL 1 STORMSL_STACK_CLASS
+		---Creates an object storing everything directly. The result has to be used with method calls.
+		---@return table stack
+		createStack_SL = function()
+			return {
+				_n = 0,
+
+				---@section push_SL
+				---Will push the value onto the top of the stack
+				---@param stack table
+				---@param value any
+				push_SL = function(stack, value)
+					stack._n = stack._n + 1
+					stack[stack._n] = value
+				end,
+
+				---@section pop_SL
+				---Will pop off the stack and return the value there if it's not empty
+				---@param stack table
+				---@return any
+				pop_SL = function(stack)
+					local n, value = stack._n
+					if n > 0 then
+						value = stack[n]
+						stack._n = n - 1
+						return value
+					end
+				end,
+				---@endsection 
+
+				---@section size_SL
+				---Returns the size of the stack
+				---@param stack table
+				---@return integer
+				size_SL = function(stack)
+					return stack._n
+				end,
+				---@endsection 
+
+				---@section read_SL
+				---Will read a position down from the top of the stack. Optional removal
+				---@param stack table
+				---@param position integer
+				---@param remove boolean? If true will remove the position from the stack, making it not stack like but you do you
+				---@return any
+				read_SL = function(stack, position, remove)
+					local n, value = stack._n
+					if n > 0 then
+						value = stack[n - position]
+						if remove then
+							remove_SL(stack, n - position)
+							stack.n = n - 1
+						end
+					end
+					return value
+				end,
+				---@endsection 
+
+				---@section write_SL
+				---Will write the value a position down from the top of the stack. Optional insert, pushing everything on top of it up, making it not stack-like
+				---@param stack table
+				---@param position integer
+				---@param value any
+				---@param insert boolean?
+				write_SL = function(stack, position, value, insert)
+					if insert then
+						insert_SL(stack, stack._n - position, value)
+						stack._n = stack._n + 1
+					else
+						stack[stack._n - position] = value
+					end
+				end
+				---@endsection 
+			}
+		end,
+		---@endsection STORMSL_STACK_CLASS
+
+		---@section createStackUpval_SL 1 STORMSL_UPVALSTACK_CLASS
+		---Creates an object with functions referencing an upvalue stack, instead of storing everything directly. The result can't be used with method functions.
+		---@return table stack
+		createStackUpval_SL = function()
+			local stack, n = {}, 0
+			return {
+				---@section push_SL
+				---Will push the value onto the top of the stack
+				---@param value any
+				push_SL = function(value)
+					n = n + 1
+					stack[n] = value
+				end,
+
+				---@section pop_SL
+				---Will pop off the stack and return the value there if it's not empty
+				---@return any
+				pop_SL = function()
+					if n > 0 then
+						n = n - 1
+						return stack[n + 1]
+					end
+				end,
+				---@endsection 
+
+				---@section size_SL
+				---Returns the size of the stack
+				---@return integer
+				size_SL = function()
+					return n
+				end,
+				---@endsection 
+
+				---@section read_SL
+				---Will read a position down from the top of the stack. Optional removal
+				---@param position integer
+				---@param remove boolean? If true will remove the position from the stack, making it not stack like but you do you
+				---@return any
+				read_SL = function(position, remove)
+					local ret = stack[n - position]
+					if remove then
+						remove_SL(stack, n-position)
+					end
+					return ret
+				end,
+				---@endsection 
+
+				---@section write_SL
+				---Will write the value a position down from the top of the stack. Optional insert, pushing everything on top of it up, making it not stack-like
+				---@param position integer
+				---@param value any
+				---@param insert boolean?
+				write_SL = function(position, value, insert)
+					if insert then
+						insert_SL(stack, n - position, value)
+						n = n + 1
+					else
+						stack[n - position] = value
+					end
+				end
+				---@endsection 
+			}
+		end,
+		---@endsection STORMSL_UPVALSTACK_CLASS
+
+		---@section createQueue_SL 1 STORMSL_QUEUE_CLASS
+		---Creates an object with functions referencing an upvalue queue in a FIFO manner, has to be used with method calls.
+		---@return table channel
+		createQueue_SL = function()
+			return {
+				_n = 0,
+				_position = 0,
+
+				---@section read_SL
+				---Reads the first entry from the queue
+				---@param queue table
+				---@return any value
+				read_SL = function(queue)
+					if queue._n > 0 then
+						local value = queue[queue._position]
+						queue[queue._position] = nil
+						queue._n = queue._n - 1
+						queue._position = queue._position + 1
+						return value
+					end
+				end,
+				---@endsection 
+
+				---@section write_SL
+				---Adds a new entry to the queue
+				---@param queue table
+				---@param value any
+				write_SL = function(queue, value)
+					queue[queue._n + queue._position] = value
+					queue._n = queue._n + 1
+				end,
+				---@endsection 
+
+				---@section getSize_SL
+				---Returns the amount of data stored in the queue
+				---@param queue table
+				---@return integer size
+				getSize_SL = function(queue)
+					return queue._n
+				end
+				---@endsection 
+			}
+		end,
+		---@endsection STORMSL_QUEUE_CLASS
+
+		---@section createQueueUval_SL 1 STORMSL_UPVALQUEUE_CLASS
+		---Creates a queue object in a FIFO manner, can't be used with method calls.
+		---@return table channel
+		createQueueUval_SL = function()
+			local queue, n, position = {}, 0, 0
+			return {
+				---@section read_SL
+				---Reads the first entry from the queue
+				---@return any value
+				read_SL = function()
+					if n > 0 then
+						local value = queue[position]
+						queue[position] = nil
+						n = n - 1
+						position = position + 1
+						return value
+					end
+				end,
+				---@endsection 
+
+				---@section write_SL
+				---Adds a new entry to the queue
+				---@param value any
+				write_SL = function(value)
+					queue[n + position] = value
+					n = n + 1
+				end,
+				---@endsection 
+
+				---@section getSize_SL
+				---Returns the amount of data stored in the queue
+				---@return integer size
+				getSize_SL = function()
+					return n
+				end
+				---@endsection 
+			}
+		end,
+		---@endsection STORMSL_UPVALQUEUE_CLASS
+
 		---@section printIntRepresentation_SL
 		---Prints a binary representation of an integer
 		---@param integer integer
@@ -604,6 +869,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 			print(text, ...)
 		end,
 		---@endsection
+
 	}
 
 	--again using upvalues for internal speedups as those end up being upvalues
