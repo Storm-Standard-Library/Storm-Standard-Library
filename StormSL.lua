@@ -546,7 +546,8 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@return integer mask
 		getIntMask_SL = function(maskBits, shift)
 			maskBits = maskBits >= 64 and -1 or maskBits<54 and 2^maskBits-1 or 2^maskBits-1024
-			return (maskBits | (maskBits >> 12) ) << (shift or 0)--doubles will drop least significant 11 bits, +1 because I'm paranoid
+			--doubles will drop least significant 11 bits at extreme sizes, +1 because I'm paranoid
+			return (maskBits | (maskBits >> 12) ) << (shift or 0)
 		end,
 		---@endsection
 
