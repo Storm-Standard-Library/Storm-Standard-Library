@@ -21,7 +21,7 @@ local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Bitformat
 ---@field sixBitTableToString_SL fun(tab:table,startIndex:integer?,endIndex:integer?):string
 ---@field stringToSixBitTable_SL fun(str:string,startChar:integer?,endChar:integer?):table
 ---@field transcribeTableBits_SL fun(tab:table,bitsIn:integer,bitsOut:integer,totalOutputValues:integer?,index:integer?):table
----Standard Stormworks Vector functions
+---Encoding and decoding between numbers of different sizes, tables [, and strings]
 Bitformatting = {
 	---@section uint32ToChannel_SL
 	---Sends 32 bit unsigned integer through stormworks composite number and boolean
