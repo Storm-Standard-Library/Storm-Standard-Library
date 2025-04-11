@@ -90,51 +90,18 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section ewma_SL
-		---Exponential weighted moving average. Smoothes out the input number.
-		---@param oldValue number previous smoothed number
-		---@param newValue number number to add and smooth, output approuches new
-		---@param alpha number how strong smoothing is
-		---@return number
-		ewma_SL = function(oldValue, newValue, alpha)
-			return (1 - alpha) * oldValue + newValue * alpha
-		end,
-		---@endsection
-
-		---@section ewmaClass_SL
-		---@class EWMA
-		---@field alpha number the smoothing factor of the EWMA, default 0.1
-		---@field value number the current smoothed value of the EWMA
-		---@field update fun(self:EWMA, newValue:number):number updates the value of the EWMA
-		---@param alpha number? the smoothing factor of the EWMA, default 0.1
-		---@param initialValue number? the initial value of the EWMA, default 0
-		---@return table EWMA object
-		ewmaClass_SL = function (alpha, initialValue)
-			return {
-				alpha = alpha or 0.1,
-				value = initialValue or 0,
-				---Updates & runs the EWMA smoothing on the new value.
-				---@param self EWMA self Table
-				---@param newValue number new value to smooth
-				---@return number smoothed Output of the EWMA
-				update = function(self, newValue)
-					self.value = (1 - self.alpha) * self.value + self.alpha * newValue
-					return self.value
-				end
-			}
-		end,
-		---@endsection
-
-		---@section ewmaClosure_SL
-		---@param alpha number? the smoothing factor of the EWMA, default 0.1
-		---@param value number? the INITIAL! value of the EWMA. Default to 0.
+		---@param initialValue number? the INITIAL! value of the EWMA. Default to 0.
+		---@param alpha number? the default smoothing factor of the EWMA, if not present then it's automatically set to 0.1
 		---@return fun(newValue:number):number run Updates & runs the EWMA smoothing on the new value.
-		ewmaClosure_SL = function (alpha, value)
-			alpha = alpha or 0.1
-			value = value or 0
+		ewma_SL = function (initialValue, defaultAlpha)
+			defaultAlpha = defaultAlpha or 0.1
+			initialValue = initialValue or 0
 			---@param newValue number new value to smooth
+			---@param optAlpha number? overwrites the default alpha
 			---@return number smoothed Output of the EWMA
-			return function(newValue)
-				value = (1 - alpha) * value + alpha * newValue
+			return function(newValue, optAlpha)
+				optAlpha = optAlpha or defaultAlpha
+				initialValue = (1 - optAlpha) * initialValue + optAlpha * newValue
 				return value
 			end
 		end,
