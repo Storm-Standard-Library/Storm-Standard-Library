@@ -10,11 +10,8 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field version_SL string
 	---@field clampS_SL fun(minimum:number, maximum:number, value:number):number
 	---@field clampQ_SL fun(minimum:number, maximum:number, value:number):number
-	---@field ewma_SL fun(old:number, new:number, gamma:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
 	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
-	---@field delta_SL fun(currentValue:number, oldvalue:number):number
-	---@field deltaClass_SL fun(innitialValue:number?):table
 	---@field deltaClosure_SL fun(innitialValue:number?):fun(newValue:number):number
 	---@field thresholdEx_SL fun(x:number, min:number, max:number):boolean
 	---@field thresholdInc_SL fun(x:number, min:number, max:number):boolean
@@ -38,8 +35,10 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field createRngClass_SL fun(seed:integer?, boundLow:number?, boundHigh:number?, integerMode:boolean?):table
 	---@field stringToWordTable_SL fun(string:string):table
 	---@field getAverage_SL fun(...:number):number
-	---@field Vector table Vector---The standard library for Stormworks Lua.
-	---The standard library for Stormworks Lua.
+	---@field Vector table Standard Stormworks Vector functions
+	---@field Matrices table Standard Stormworks matrix functions
+	---@field Bitformatting table Encoding and decoding between numbers of different sizes, tables [, and strings]
+	---The Storm standard library for Stormworks Lua.
 	StormSL = {
 		---@section version_SL
 		version_SL='0.0.0',
@@ -64,17 +63,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@return number
 		clampQ_SL = function(minimum, maximum, value)
 			return value > maximum and maximum or (value < minimum and minimum or value)
-		end,
-		---@endsection
-
-		---@section ewma_SL
-		---Exponential weighted moving average. Smoothes out the input number.
-		---@param oldValue number previous smoothed number
-		---@param newValue number number to add and smooth, output approuches new
-		---@param alpha number how strong smoothing is
-		---@return number
-		ewma_SL = function(oldValue, newValue, alpha)
-			return (1 - alpha) * oldValue + newValue * alpha
 		end,
 		---@endsection
 
@@ -115,36 +103,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				value = (1 - alpha) * value + alpha * newValue
 				return value
 			end
-		end,
-		---@endsection
-
-		---@section delta_SL
-		---@param currentValue number
-		---@param oldValue number
-		---@return number delta
-		delta_SL = function (currentValue, oldValue)
-			return currentValue - oldValue
-		end,
-		---@endsection
-
-		---@section deltaClass_SL
-		---@class delta
-		---@field oldValue number the number stored from previous update
-		---@field update fun(newValue:number):number
-		---@param innitialValue number?
-		---@return table
-		deltaClass_SL = function (innitialValue)
-			return {
-				oldValue = innitialValue or 0,
-				---@param self table
-				---@param newValue number
-				---@return number delta
-				update = function(self, newValue)
-					local delta = newValue - self.oldValue
-					self.oldValue = newValue
-					return delta
-				end
-			}
 		end,
 		---@endsection
 
