@@ -7,41 +7,41 @@ do
 	
 	---@section Control 1 STORMSL_CONTROL_CLASS
 	---@class Control
-	---@field bangBangClosure fun(minOutput: number, maxOutput: number): fun(setpoint: number, processVar: number): number
-	---@field bangBangClass fun(minOutput: number, maxOutput: number): bangBangClassInstance
-	---@field PClosure fun(kp: number): fun(setpoint: number, processVar: number): number
-	---@field PClass fun(kp: number): PClassInstance
-	---@field IClosure fun(ki: number, lowerIntegralClamp: number, upperIntegralClamp: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
-	---@field IClass fun(ki: number, lowerIntegralClamp: number, upperIntegralClamp: number, optIntegralOvershootZeroing: boolean|nil): IClassInstance
-	---@field PDClosure fun(kp: number, kd: number): fun(setpoint: number, processVar: number): number
-	---@field PDClass fun(kp: number, kd: number): PDClassInstance
-	---@field simplePIClosure fun(kp: number, ki: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
-	---@field advancedPIClosure fun(kp: number, ki: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
-	---@field simplePIClass fun(kp: number, ki: number, lowerIntegralClamp: number, upperIntegralClamp: number): simplePIClassInstance
-	---@field advancedPIClass fun(kp: number, ki: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedPIClassInstance
-	---@field simpleIDClosure fun(ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
-	---@field advancedIDClosure fun(ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
-	---@field simpleIDClass fun(ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): simpleIDClassInstance
-	---@field advancedIDClass fun(ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedIDClassInstance
-	---@field simplePIDClosure fun(kp: number, ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
-	---@field advancedPIDClosure fun(kp: number, ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
-	---@field simplePIDClass fun(kp: number, ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): simplePIDClassInstance
-	---@field advancedPIDClass fun(kp: number, ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedPIDClassInstance
+	---@field bangBangClosure_SL fun(minOutput: number, maxOutput: number): fun(setpoint: number, processVar: number): number
+	---@field bangBangClass_SL fun(minOutput: number, maxOutput: number): bangBangClassInstance
+	---@field PClosure_SL fun(kp: number): fun(setpoint: number, processVar: number): number
+	---@field PClass_SL fun(kp: number): PClassInstance
+	---@field IClosure_SL fun(ki: number, lowerIntegralClamp: number, upperIntegralClamp: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
+	---@field IClass_SL fun(ki: number, lowerIntegralClamp: number, upperIntegralClamp: number, optIntegralOvershootZeroing: boolean|nil): IClassInstance
+	---@field PDClosure_SL fun(kp: number, kd: number): fun(setpoint: number, processVar: number): number
+	---@field PDClass_SL fun(kp: number, kd: number): PDClassInstance
+	---@field simplePIClosure_SL fun(kp: number, ki: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
+	---@field advancedPIClosure_SL fun(kp: number, ki: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
+	---@field simplePIClass_SL fun(kp: number, ki: number, lowerIntegralClamp: number, upperIntegralClamp: number): simplePIClassInstance
+	---@field advancedPIClass_SL fun(kp: number, ki: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedPIClassInstance
+	---@field simpleIDClosure_SL fun(ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
+	---@field advancedIDClosure_SL fun(ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
+	---@field simpleIDClass_SL fun(ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): simpleIDClassInstance
+	---@field advancedIDClass_SL fun(ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedIDClassInstance
+	---@field simplePIDClosure_SL fun(kp: number, ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): fun(setpoint: number, processVar: number): number
+	---@field advancedPIDClosure_SL fun(kp: number, ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): fun(setpoint: number, processVar: number): number
+	---@field simplePIDClass_SL fun(kp: number, ki: number, kd: number, lowerIntegralClamp: number, upperIntegralClamp: number): simplePIDClassInstance
+	---@field advancedPIDClass_SL fun(kp: number, ki: number, kd: number, lowerBackCalcSatLimit: number, upperBackCalcSatLimit: number, optIntegralOvershootZeroing: boolean|nil): advancedPIDClassInstance
 	---Essential Stormworks feedback control algorithms.
 	Control = {
 
 
-		---@section bangBangClosure
+		---@section bangBangClosure_SL
 		---A simple bang-bang controller, implemented as a closure.
 		---@param minOutput number The value to output when processVar is below setpoint
 		---@param maxOutput number The value to output when processVar is above setpoint
 		---@return fun(setpoint:number, processVar:number): number
-		bangBangClosure = function(minOutput,maxOutput)
+		bangBangClosure_SL = function(minOutput,maxOutput)
 			return function(setpoint,processVar) return processVar < setpoint and maxOutput or minOutput end
 		end,
 		---@endsection
 
-		---@section bangBangClass
+		---@section bangBangClass_SL
 		
 		---@class bangBangClassInstance
 		---@field minOutput number
@@ -52,7 +52,7 @@ do
 		---@param minOutput number The value to output when processVar is below setpoint
 		---@param maxOutput number The value to output when processVar is above setpoint
 		---@return bangBangClassInstance
-		bangBangClass = function(minOutput,maxOutput)
+		bangBangClass_SL = function(minOutput,maxOutput)
 			return {
 				minOutput=minOutput,
 				maxOutput=maxOutput,
@@ -64,16 +64,16 @@ do
 
 
 
-		---@section PCLosure
+		---@section PClosure_SL
 		---A P-controller, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@return fun(setpoint:number, processVar:number): number
-		PClosure = function(kp)
+		PClosure_SL = function(kp)
 			return function(setpoint, processVar) return (setpoint-processVar)*kp end
 		end,
 		---@endsection 
 
-		---@section PClass
+		---@section PClass_SL
 		
 		---@class PClassInstance
 		---@field kp number
@@ -82,7 +82,7 @@ do
 		---A P-controller, implemented as a class.
 		---@param kp number Tuned P-constant
 		---@return PClassInstance
-		PClass = function(kp)
+		PClass_SL = function(kp)
 			return {
 				kp = kp,
 				run = function(self, setpoint, processVar)
@@ -96,14 +96,14 @@ do
 
 
 
-		---@section ICLosure
+		---@section IClosure_SL
 		---An I-controller with integral clamp and optional clegg integration, implemented as a closure.
 		---@param ki number Tuned I-constant
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return fun(setpoint:number, processVar:number): number
-		IClosure = function(ki, lowerIntegralClamp, upperIntegralClamp, optIntegralOvershootZeroing)
+		IClosure_SL = function(ki, lowerIntegralClamp, upperIntegralClamp, optIntegralOvershootZeroing)
 			local integral, lastError = 0,0
 			return function(setpoint, processVar)
 				
@@ -120,7 +120,7 @@ do
 		end,
 		---@endsection 
 
-		---@section IClass
+		---@section IClass_SL
 
 		---@class IClassInstance
 		---@field ki number
@@ -137,7 +137,7 @@ do
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return IClassInstance
-		IClass = function(ki,lowerIntegralClamp,upperIntegralClamp,optIntegralOvershootZeroing)
+		IClass_SL = function(ki,lowerIntegralClamp,upperIntegralClamp,optIntegralOvershootZeroing)
 			return {
 				ki = ki,
 				lowerIntegralClamp = lowerIntegralClamp,
@@ -164,12 +164,12 @@ do
 
 
 
-		---@section PDCLosure
+		---@section PDClosure_SL
 		---A PD-controller, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@param kd number Tuned D-constant
 		---@return fun(setpoint:number, processVar:number): number
-		PDClosure = function(kp,kd)
+		PDClosure_SL = function(kp,kd)
 			local errorPrior = 0
 			return function(setpoint, processVar)
 				local error, deltaPreMul = setpoint-processVar,0
@@ -180,7 +180,7 @@ do
 		end,
 		---@endsection
 
-		---@section PDClass
+		---@section PDClass_SL
 		
 		---@class PDClassInstance
 		---@field kp number
@@ -192,7 +192,7 @@ do
 		---@param kp number Tuned P-constant
 		---@param kd number Tuned D-constant
 		---@return PDClassInstance
-		PDClass = function(kp,kd)
+		PDClass_SL = function(kp,kd)
 			return {
 				kp = kp,
 				kd = kd,
@@ -211,14 +211,14 @@ do
 
 
 
-		---@section simplePIClosure
+		---@section simplePIClosure_SL
 		---A PI-controller with integral clamp, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@param ki number Tuned I-constant
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return fun(setpoint:number, processVar:number): number
-		simplePIClosure = function(kp, ki, lowerIntegralClamp, upperIntegralClamp)
+		simplePIClosure_SL = function(kp, ki, lowerIntegralClamp, upperIntegralClamp)
 			local integral = 0
 			return function(setpoint, processVar)
 				
@@ -230,7 +230,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedPIClosure
+		---@section advancedPIClosure_SL
 		---A PI-controller with clegg integration and back calculation anti integral windup, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@param ki number Tuned I-constant
@@ -238,7 +238,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return fun(setpoint:number, processVar:number): number
-		advancedPIClosure = function(kp, ki, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
+		advancedPIClosure_SL = function(kp, ki, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
 			local integral, lastError = 0,0
 			return function(setpoint, processVar)
 				
@@ -261,7 +261,7 @@ do
 		end,
 		---@endsection
 
-		---@section simplePIClass
+		---@section simplePIClass_SL
 
 		---@class simplePIClassInstance
 		---@field kp number
@@ -277,7 +277,7 @@ do
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return simplePIClassInstance
-		simplePIClass = function(kp, ki,lowerIntegralClamp,upperIntegralClamp)
+		simplePIClass_SL = function(kp, ki,lowerIntegralClamp,upperIntegralClamp)
 			return {
 				kp = kp,
 				ki = ki,
@@ -295,7 +295,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedPIClass
+		---@section advancedPIClass_SL
 
 		---@class advancedPIClassInstance
 		---@field kp number
@@ -314,7 +314,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return advancedPIClassInstance
-		advancedPIClass = function(kp, ki,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
+		advancedPIClass_SL = function(kp, ki,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
 			return {
 				kp = kp,
 				ki = ki,
@@ -348,14 +348,14 @@ do
 
 
 
-		---@section simpleIDClosure
+		---@section simpleIDClosure_SL
 		---An ID-controller with integral clamp, implemented as a closure.
 		---@param ki number Tuned I-constant
 		---@param kd number Tuned D-constant
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return fun(setpoint:number, processVar:number): number
-		simpleIDClosure = function(ki, kd, lowerIntegralClamp, upperIntegralClamp)
+		simpleIDClosure_SL = function(ki, kd, lowerIntegralClamp, upperIntegralClamp)
 			local integral = 0
 			local lastError = 0
 			return function(setpoint, processVar)
@@ -370,7 +370,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedIDClosure
+		---@section advancedIDClosure_SL
 		---An ID-controller with clegg integration and back calculation anti integral windup, implemented as a closure.
 		---@param ki number Tuned I-constant
 		---@param kd number Tuned D-constant
@@ -378,7 +378,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return fun(setpoint:number, processVar:number): number
-		advancedIDClosure = function(ki, kd, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
+		advancedIDClosure_SL = function(ki, kd, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
 			local integral, lastError = 0,0
 			return function(setpoint, processVar)
 				
@@ -402,7 +402,7 @@ do
 		end,
 		---@endsection
 
-		---@section simpleIDClass
+		---@section simpleIDClass_SL
 
 		---@class simpleIDClassInstance
 		---@field ki number
@@ -419,7 +419,7 @@ do
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return simpleIDClassInstance
-		simpleIDClass = function(ki, kd,lowerIntegralClamp,upperIntegralClamp)
+		simpleIDClass_SL = function(ki, kd,lowerIntegralClamp,upperIntegralClamp)
 			return {
 				ki = ki,
 				kd = kd,
@@ -440,7 +440,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedIDClass
+		---@section advancedIDClass_SL
 
 		---@class advancedIDClassInstance
 		---@field ki number
@@ -459,7 +459,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return advancedIDClassInstance
-		advancedIDClass = function(ki, kd,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
+		advancedIDClass_SL = function(ki, kd,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
 			return {
 				ki = ki,
 				kd = kd,
@@ -493,7 +493,7 @@ do
 
 
 
-		---@section simplePIDClosure
+		---@section simplePIDClosure_SL
 		---A PID-controller with integral clamp, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@param ki number Tuned I-constant
@@ -501,7 +501,7 @@ do
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return fun(setpoint:number, processVar:number): number
-		simplePIDClosure = function(kp, ki, kd, lowerIntegralClamp, upperIntegralClamp)
+		simplePIDClosure_SL = function(kp, ki, kd, lowerIntegralClamp, upperIntegralClamp)
 			local integral = 0
 			local lastError = 0
 			return function(setpoint, processVar)
@@ -519,7 +519,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedPIDClosure
+		---@section advancedPIDClosure_SL
 		---A PID-controller with clegg integration and back calculation anti integral windup, implemented as a closure.
 		---@param kp number Tuned P-constant
 		---@param ki number Tuned I-constant
@@ -528,7 +528,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return fun(setpoint:number, processVar:number): number
-		advancedPIDClosure = function(kp, ki, kd, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
+		advancedPIDClosure_SL = function(kp, ki, kd, lowerBackCalcSatLimit, upperBackCalcSatLimit, optIntegralOvershootZeroing)
 			local integral, lastError = 0,0
 			return function(setpoint, processVar)
 				
@@ -553,7 +553,7 @@ do
 		end,
 		---@endsection
 
-		---@section simplePIDClass
+		---@section simplePIDClass_SL
 
 		---@class simplePIDClassInstance
 		---@field kp number
@@ -572,7 +572,7 @@ do
 		---@param lowerIntegralClamp number Total integral will never go below max(integral,lowerIntegralClamp). To not use, set to -inf (-1/0)
 		---@param upperIntegralClamp number Total integral will never exceed min(integral,upperIntegralClamp). To not use, set to inf (1/0)
 		---@return simplePIDClassInstance
-		simplePIDClass = function(kp, ki, kd,lowerIntegralClamp,upperIntegralClamp)
+		simplePIDClass_SL = function(kp, ki, kd,lowerIntegralClamp,upperIntegralClamp)
 			return {
 				kp = kp,
 				ki = ki,
@@ -597,7 +597,7 @@ do
 		end,
 		---@endsection
 		
-		---@section advancedPIDClass
+		---@section advancedPIDClass_SL
 
 		---@class advancedPIDClassInstance
 		---@field kp number
@@ -618,7 +618,7 @@ do
 		---@param upperBackCalcSatLimit number This number should be the upper saturation limit for your actuator, and will be used to unwind integral using back-calculation. I.e. both of the axes on the missile fin have an upper saturation limit of 10.
 		---@param optIntegralOvershootZeroing boolean|nil If set to true, integral will get set to 0 when processVar moves across the setpoint. (clegg integration)
 		---@return advancedPIDClassInstance
-		advancedPIDClass = function(kp, ki, kd,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
+		advancedPIDClass_SL = function(kp, ki, kd,lowerBackCalcSatLimit,upperBackCalcSatLimit,optIntegralOvershootZeroing)
 			return {
 				kp = kp,
 				ki = ki,
