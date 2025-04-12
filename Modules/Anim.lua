@@ -73,6 +73,7 @@ Anim = {
 		end
 	end,
 	---@endsection
+	
 }
 
 StormSL.Anim = Anim
