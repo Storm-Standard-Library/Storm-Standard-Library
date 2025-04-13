@@ -1,11 +1,8 @@
---version 0.0.0
-
 ---@section StormSL 1 _STORM_SL_CLASS_
 do	--hides the upvalues so that there's no chance of name conflict for locals below
-	local ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL=ipairs,pairs,table.insert,table.remove,type,table.unpack
+	local Vectors, Matrices, Bitformatting, Control, Anim
 
 	--it's declared as a global so that it can be accessed from anywhere in the script, always
-
 	---@class StormSL
 	---@field version_SL string
 	---@field clampS_SL fun(minimum:number, maximum:number, value:number):number
@@ -35,9 +32,11 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field createRngClass_SL fun(seed:integer?, boundLow:number?, boundHigh:number?, integerMode:boolean?):table
 	---@field stringToWordTable_SL fun(string:string):table
 	---@field getAverage_SL fun(...:number):number
-	---@field Vector table Standard Stormworks Vector functions
-	---@field Matrices table Standard Stormworks matrix functions
-	---@field Bitformatting table Encoding and decoding between numbers of different sizes, tables [, and strings]
+	---@field Vectors Vectors Standard Stormworks Vector functions
+	---@field Matrices Matrices Standard Stormworks matrix functions
+	---@field Bitformatting Bitformatting Encoding and decoding between numbers of different sizes, tables [, and strings]
+	---@field Control Control Essential Stormworks feedback control algorithms.
+	---@field Anim Anim Simple, useful, animation related functions.
 	---The Storm standard library for Stormworks Lua.
 	StormSL = {
 		---@section version_SL
@@ -448,7 +447,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 
 	--again using upvalues for internal speedups as those end up being upvalues
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
-	local Vectors, Matrices, Bitformatting, Control, Anim
 	require('Modules.Vectors')
 	require('Modules.Matrices')
 	require('Modules.Bitformatting')

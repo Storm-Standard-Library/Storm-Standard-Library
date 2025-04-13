@@ -5,7 +5,7 @@
 ---@field easeInCirc_SL fun(progress: number): number
 ---@field easeOutCirc_SL fun(progress: number): number
 ---@field easeInOutCirc_SL fun(progress: number): number
----Simple, useful animation functions.
+---Simple, useful, animation related functions.
 Anim = {
 
 	---@section animator_SL
