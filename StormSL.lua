@@ -1,20 +1,14 @@
---version 0.0.0
-
 ---@section StormSL 1 _STORM_SL_CLASS_
 do	--hides the upvalues so that there's no chance of name conflict for locals below
-	local ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL=ipairs,pairs,table.insert,table.remove,type,table.unpack
+	local Vectors, Matrices, Bitformatting, Control, Anim
 
 	--it's declared as a global so that it can be accessed from anywhere in the script, always
-
 	---@class StormSL
 	---@field version_SL string
 	---@field clampS_SL fun(minimum:number, maximum:number, value:number):number
 	---@field clampQ_SL fun(minimum:number, maximum:number, value:number):number
-	---@field ewma_SL fun(old:number, new:number, gamma:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
 	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
-	---@field delta_SL fun(currentValue:number, oldvalue:number):number
-	---@field deltaClass_SL fun(innitialValue:number?):table
 	---@field deltaClosure_SL fun(innitialValue:number?):fun(newValue:number):number
 	---@field getPulseToToggleClosure_SL fun(initialState:boolean?):function
 	---@field getPushToPulseClosure_SL fun(initialState:boolean?):function
@@ -52,9 +46,12 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field createQueueUpval_SL fun():table
 	---@field printIntRepresentation_SL fun(integer:integer,...:any):nil
 	---@field cache_SL table
-	---@field Vectors table
-	---@field Matrices table
-	---The standard library for Stormworks Lua.
+	---@field Vectors Vectors Standard Stormworks Vector functions
+	---@field Matrices Matrices Standard Stormworks matrix functions
+	---@field Bitformatting Bitformatting Encoding and decoding between numbers of different sizes, tables [, and strings]
+	---@field Control Control Essential Stormworks feedback control algorithms.
+	---@field Anim Anim Simple, useful, animation related functions.
+	---The Storm standard library for Stormworks Lua.
 	StormSL = {
 
 		---@section version_SL
@@ -89,9 +86,33 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection
 
-		---@section ewma_SL
-		---@param initialValue number? the INITIAL! value of the EWMA. Default to 0.
-		---@param alpha number? the default smoothing factor of the EWMA, if not present then it's automatically set to 0.1
+		---@section ewmaClass_SL
+		---@class EWMA
+		---@field alpha number the smoothing factor of the EWMA, default 0.1
+		---@field value number the current smoothed value of the EWMA
+		---@field update fun(self:EWMA, newValue:number):number updates the value of the EWMA
+		---@param alpha number? the smoothing factor of the EWMA, default 0.1
+		---@param initialValue number? the initial value of the EWMA, default 0
+		---@return table EWMA object
+		ewmaClass_SL = function (alpha, initialValue)
+			return {
+				alpha = alpha or 0.1,
+				value = initialValue or 0,
+				---Updates & runs the EWMA smoothing on the new value.
+				---@param self EWMA self Table
+				---@param newValue number new value to smooth
+				---@return number smoothed Output of the EWMA
+				update = function(self, newValue)
+					self.value = (1 - self.alpha) * self.value + self.alpha * newValue
+					return self.value
+				end
+			}
+		end,
+		---@endsection
+
+		---@section ewmaClosure_SL
+		---@param alpha number? the smoothing factor of the EWMA, default 0.1
+		---@param value number? the INITIAL! value of the EWMA. Default to 0.
 		---@return fun(newValue:number):number run Updates & runs the EWMA smoothing on the new value.
 		ewma_SL = function (initialValue, defaultAlpha)
 			defaultAlpha = defaultAlpha or 0.1
@@ -104,36 +125,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				initialValue = (1 - optAlpha) * initialValue + optAlpha * newValue
 				return value
 			end
-		end,
-		---@endsection
-
-		---@section delta_SL
-		---@param currentValue number
-		---@param oldValue number
-		---@return number delta
-		delta_SL = function (currentValue, oldValue)
-			return currentValue - oldValue
-		end,
-		---@endsection
-
-		---@section deltaClass_SL
-		---@class delta
-		---@field oldValue number the number stored from previous update
-		---@field update fun(newValue:number):number
-		---@param innitialValue number?
-		---@return table
-		deltaClass_SL = function (innitialValue)
-			return {
-				oldValue = innitialValue or 0,
-				---@param self table
-				---@param newValue number
-				---@return number delta
-				update = function(self, newValue)
-					local delta = newValue - self.oldValue
-					self.oldValue = newValue
-					return delta
-				end
-			}
 		end,
 		---@endsection
 
@@ -842,10 +833,11 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 
 	--again using upvalues for internal speedups as those end up being upvalues
 	--build require is a copypaste, hence it works as VectorSL will be able to access itself for example
-	local Vectors, Matrices, Bitformatting
 	require('Modules.Vectors')
 	require('Modules.Matrices')
 	require('Modules.Bitformatting')
+	require('Modules.Control')
+	require('Modules.Anim')
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table

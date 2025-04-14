@@ -1,6 +1,6 @@
 # Storm Standard Library
 
-The **Storm Standard Library** is designed to unify and streamline Lua scripting for Stormworks, by providing a comprehensive set of functions for common tasks, and by establishing clear standards. Created by and with input from experienced Lua developers.
+The **Storm Standard Library** is being designed to unify and streamline Lua scripting for Stormworks, by providing a comprehensive set of functions for common tasks, and by establishing clear standards. Created by and with input from experienced Lua developers.
 
 The library's primary function is providing general purpose un-opinionated utilities, but it should not shy away from more general functionality, such as state machines, case, logic, canvas, and control schemes, all packaged in the best possible balance between performance and compact char count.
 
