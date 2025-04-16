@@ -1,4 +1,4 @@
----@section Control 1 STORMSL_CONTROL_CLASS
+---@section Control 2 STORMSL_CONTROL_CLASS
 ---@class Control
 ---@field bangBangClosure_SL fun(minOutput: number, maxOutput: number): fun(setpoint: number, processVar: number): number
 ---@field bangBangClass_SL fun(minOutput: number, maxOutput: number): bangBangClassInstance

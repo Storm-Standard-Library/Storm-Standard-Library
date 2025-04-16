@@ -1,14 +1,5 @@
 
-
----@section __LB_SIMULATOR_ONLY_STORMSL_MATRICES_START__
-do
-local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Matrices=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
----@endsection
-
-
-
-
----@section Matrices 1 STORMSL_MATRICES_CLASS
+---@section Matrices 2 STORMSL_MATRICES_CLASS
 ---@class Matrices
 ---@field newRowsM_SL fun(...:table):table
 ---@field newValuesM_SL fun(rows:integer,columns:integer,...:number):table
@@ -87,8 +78,8 @@ Matrices = {
 	---@return table copyMatrix
 	copyM_SL = function(matrix)
 		local copyMatrix = {}
-		for i, row in ipairs_SL(matrix) do
-			copyMatrix[i] = {unpack_SL(row)}
+		for i, row in ipairs(matrix) do
+			copyMatrix[i] = {table.unpack(row)}
 		end
 		return copyMatrix
 	end,
@@ -228,9 +219,9 @@ Matrices = {
 	minorM_SL = function(matrix, row, column)
 		local outputMatrix = Matrices.copyM_SL(matrix)
 
-		remove_SL(outputMatrix, row)
+		table.remove(outputMatrix, row)
 		for row = 1, #outputMatrix do
-			remove_SL(outputMatrix[row], column)
+			table.remove(outputMatrix[row], column)
 		end
 
 		return outputMatrix
@@ -360,9 +351,3 @@ Matrices = {
 
 StormSL.Matrices = Matrices
 ---@endsection STORMSL_MATRICES_CLASS
-
-
-
----@section __LB_SIMULATOR_ONLY_STORMSL_MATRICES_END__
-end
----@endsection

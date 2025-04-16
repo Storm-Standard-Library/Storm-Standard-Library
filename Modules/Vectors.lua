@@ -14,16 +14,7 @@
 ]]
 
 
-
-
----@section __LB_SIMULATOR_ONLY_STORMSL_VECTORS_START__
-do
-local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Vectors=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
----@endsection
-
-
-
----@section Vectors 1 STORMSL_VECTORS_CLASS
+---@section Vectors 2 STORMSL_VECTORS_CLASS
 ---@class Vectors
 ---@field newV2_SL fun(x:number?,y:number?):table
 ---@field newV3_SL fun(x:number?,y:number?,z:number?):table
@@ -239,7 +230,7 @@ Vectors = {
 	---@return table vector
 	pruneVA_SL=function(vector, size)
 		for i = #vector, size + 1, -1 do
-			remove_SL(vector, i)
+			table.remove(vector, i)
 		end
 		return vector
 	end,
@@ -350,7 +341,7 @@ Vectors = {
 	---@param vectorToCopyFrom table
 	---@return table vector
 	setToVA_SL = function(vectorToChange, vectorToCopyFrom)
-		for i, v in ipairs_SL(vectorToCopyFrom) do
+		for i, v in ipairs(vectorToCopyFrom) do
 			vectorToChange[i] = v
 		end
 
@@ -390,7 +381,7 @@ Vectors = {
 	---@param vectorToCopy table
 	---@return table vector
 	copyVA_SL = function(vectorToCopy)
-		return {unpack_SL(vectorToCopy)}
+		return {table.unpack(vectorToCopy)}
 	end,
 	---@endsection
 
@@ -434,7 +425,7 @@ Vectors = {
 	---@return number dot
 	dotVA_SL = function(vectorA, vectorB)
 		local dot = 0
-		for i, vec1Value in ipairs_SL(vectorA) do
+		for i, vec1Value in ipairs(vectorA) do
 			dot = dot + vec1Value * vectorB[input]
 		end
 		return dot
@@ -474,7 +465,7 @@ Vectors = {
 	---@return number magnitude
 	magnitudeVA_SL = function(vector)
 		local mag = 0
-		for i, value in ipairs_SL(vector) do
+		for i, value in ipairs(vector) do
 			mag = mag + value * value
 		end
 		return mag^0.5
@@ -687,12 +678,12 @@ Vectors = {
 	scaleVAQ_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vecValue in ipairs_SL(vector) do
+		for i, vecValue in ipairs(vector) do
 			outputVector[i] = vecValue * scalar
 		end
 
 		for i = #outputVector, #vector + 1, -1 do
-			remove_SL(outputVector, i)
+			table.remove(outputVector, i)
 		end
 		return outputVector
 	end,
@@ -707,7 +698,7 @@ Vectors = {
 	scaleVA_SL = function(vector, scalar, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vecValue in ipairs_SL(vector) do
+		for i, vecValue in ipairs(vector) do
 			outputVector[i] = vecValue * scalar
 		end
 
@@ -879,17 +870,17 @@ Vectors = {
 
 		--doesn't produce NaNs but doesn't normalize to 1 either if the vector is 0
 		local magnitude = 0
-		for i, vecValue in ipairs_SL(vector) do
+		for i, vecValue in ipairs(vector) do
 			magnitude = magnitude + vecValue*vecValue
 		end
 		magnitude = magnitude == 0 and 1 or magnitude
 
-		for i, vecValue in ipairs_SL(vector) do
+		for i, vecValue in ipairs(vector) do
 			outputVector[i] = vecValue / magnitude
 		end
 
 		for i = #outputVector, #vector + 1, -1 do
-			remove_SL(outputVector, i)
+			table.remove(outputVector, i)
 		end
 		return outputVector
 	end,
@@ -1077,12 +1068,12 @@ Vectors = {
 	addVAQ_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
+		for i, vec1Value in ipairs(vectorA) do
 			outputVector[i] = vec1Value + vectorB[i]
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector, i)
+			table.remove(outputVector, i)
 		end
 		return outputVector
 	end,
@@ -1097,7 +1088,7 @@ Vectors = {
 	addVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
+		for i, vec1Value in ipairs(vectorA) do
 			outputVector[i] = vec1Value + vectorB[i]
 		end
 
@@ -1274,12 +1265,12 @@ Vectors = {
 	subVAQ_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
+		for i, vec1Value in ipairs(vectorA) do
 			outputVector[i] = vec1Value - vectorB[i]
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector, i)
+			table.remove(outputVector, i)
 		end
 		return outputVector
 	end,
@@ -1294,7 +1285,7 @@ Vectors = {
 	subVA_SL = function(vectorA, vectorB, outputVector)
 		outputVector = outputVector or {}
 
-		for i, vec1Value in ipairs_SL(vectorA) do
+		for i, vec1Value in ipairs(vectorA) do
 			outputVector[i] = vec1Value - vectorB[i]
 		end
 		return Vectors.pruneVA_SL(outputVector, #vectorA)
@@ -1510,12 +1501,12 @@ Vectors = {
 		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		for i, vecAValue in ipairs_SL(vectorA) do
+		for i, vecAValue in ipairs(vectorA) do
 			outputVector[i] = scalarForA * vecAValue + scalarForB * vectorB[i]
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector, i)
+			table.remove(outputVector, i)
 		end
 		return outputVector
 	end,
@@ -1534,7 +1525,7 @@ Vectors = {
 		scalarForB = scalarForB or 1
 		outputVector = outputVector or {}
 
-		for i, vecAValue in ipairs_SL(vectorA) do
+		for i, vecAValue in ipairs(vectorA) do
 			outputVector[i] = scalarForA * vecAValue + scalarForB * vectorB[i]
 		end
 
@@ -1793,7 +1784,7 @@ Vectors = {
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector,i)
+			table.remove(outputVector,i)
 		end
 		return outputVector
 	end,
@@ -1999,7 +1990,7 @@ Vectors = {
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector,i)
+			table.remove(outputVector,i)
 		end
 		return outputVector
 	end,
@@ -2191,7 +2182,7 @@ Vectors = {
 		end
 
 		for i = #outputVector, #vectorA + 1, -1 do
-			remove_SL(outputVector,i)
+			table.remove(outputVector,i)
 		end
 		return outputVector
 	end,
@@ -2451,18 +2442,18 @@ Vectors = {
 	matMultVAQ_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 
-		vector = outputVector == vector and {unpack_SL(vector)} or vector
+		vector = outputVector == vector and {table.unpack(vector)} or vector
 
-		for i, row in ipairs_SL(matrix) do
+		for i, row in ipairs(matrix) do
 			local v = 0
-			for j, weight in ipairs_SL(row) do
+			for j, weight in ipairs(row) do
 				v = v + weight * vector[j]
 			end
 			outputVector[i] = v
 		end
 
 		for i = #outputVector, #matrix + 1, -1 do
-			remove_SL(outputVector,i)
+			table.remove(outputVector,i)
 		end
 		return outputVector
 	end,
@@ -2477,11 +2468,11 @@ Vectors = {
 	matMultVA_SL = function(vector, matrix, outputVector)
 		outputVector = outputVector or {}
 
-		vector = outputVector == vector and {unpack_SL(vector)} or vector
+		vector = outputVector == vector and {table.unpack(vector)} or vector
 
-		for i, row in ipairs_SL(matrix) do
+		for i, row in ipairs(matrix) do
 			local v = 0
-			for j, weight in ipairs_SL(row) do
+			for j, weight in ipairs(row) do
 				v = v + weight * vector[j]
 			end
 			outputVector[i] = v
@@ -2500,9 +2491,9 @@ Vectors = {
 	matMultVAS_SL = function(vector, matrix)
 		local outputVector, v = {}
 
-		for i, row in ipairs_SL(matrix) do
+		for i, row in ipairs(matrix) do
 			v = 0
-			for j, weight in ipairs_SL(row) do
+			for j, weight in ipairs(row) do
 				v = v + weight * vector[j]
 			end
 			outputVector[i] = v
@@ -2540,10 +2531,3 @@ Vectors = {
 
 StormSL.Vectors = Vectors
 ---@endsection STORMSL_VECTORS_CLASS
-
-
-
-
----@section __LB_SIMULATOR_ONLY_STORMSL_VECTORS_END__
-end
----@endsection

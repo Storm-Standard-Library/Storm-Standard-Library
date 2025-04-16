@@ -1,14 +1,13 @@
 ---@section StormSL 1 _STORM_SL_CLASS_
 do	--hides the upvalues so that there's no chance of name conflict for locals below
-	local Vectors, Matrices, Bitformatting, Control, Anim
+	local Vectors, Matrices, Bitformatting, Control, Anim, Compression
 
 	--it's declared as a global so that it can be accessed from anywhere in the script, always
 	---@class StormSL
 	---@field version_SL string
-	---@field clampS_SL fun(minimum:number, maximum:number, value:number):number
-	---@field clampQ_SL fun(minimum:number, maximum:number, value:number):number
+	---@field clamp_SL fun(minimum:number, maximum:number, value:number):number
 	---@field ewmaClass_SL fun(alpha:number?, innitialValue:number?):table
-	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number):number
+	---@field ewmaClosure_SL fun(alpha:number?, value:number?):fun(newValue:number,optAlpha:number?):number
 	---@field deltaClosure_SL fun(innitialValue:number?):fun(newValue:number):number
 	---@field getPulseToToggleClosure_SL fun(initialState:boolean?):function
 	---@field getPushToPulseClosure_SL fun(initialState:boolean?):function
@@ -44,7 +43,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field createStackUpval_SL fun():table
 	---@field createQueue_SL fun():table
 	---@field createQueueUpval_SL fun():table
-	---@field printIntRepresentation_SL fun(integer:integer,...:any):nil
 	---@field cache_SL table
 	---@field Vectors Vectors Standard Stormworks Vector functions
 	---@field Matrices Matrices Standard Stormworks matrix functions
@@ -65,24 +63,12 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section clamp_SL
-		--- ~9 chars smaller minified than clampQ, but twice as slow, which is completely fine unless it's in a hot loop
 		---@param minimum number
 		---@param maximum number
 		---@param value number
 		---@return number
-		clampS_SL = function(minimum, maximum, value)
+		clamp_SL = function(minimum, maximum, value)
 			return math.min(maximum, math.max(minimum, value))
-		end,
-		---@endsection
-
-		---@section clamp_SL
-		---twice as fast as clampS, but ~9 chars larger minified too. Preferable for hot loops
-		---@param minimum number
-		---@param maximum number
-		---@param value number
-		---@return number
-		clampQ_SL = function(minimum, maximum, value)
-			return value > maximum and maximum or (value < minimum and minimum or value)
 		end,
 		---@endsection
 
@@ -111,19 +97,19 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section ewmaClosure_SL
-		---@param alpha number? the smoothing factor of the EWMA, default 0.1
-		---@param value number? the INITIAL! value of the EWMA. Default to 0.
-		---@return fun(newValue:number):number run Updates & runs the EWMA smoothing on the new value.
-		ewma_SL = function (initialValue, defaultAlpha)
+		---@param defaultAlpha number? the INITIAL! smoothing factor of the EWMA, default 0.1
+		---@param initialValue number? the INITIAL! value of the EWMA. Default to 0.
+		---@return fun(newValue:number,optAlpha:number?):number run Updates & runs the EWMA smoothing on the new value.
+		ewmaClosure_SL = function (initialValue, defaultAlpha)
 			defaultAlpha = defaultAlpha or 0.1
 			initialValue = initialValue or 0
 			---@param newValue number new value to smooth
-			---@param optAlpha number? overwrites the default alpha
+			---@param optAlpha number? if present, will overwrite the defaultAlpha permamently
 			---@return number smoothed Output of the EWMA
 			return function(newValue, optAlpha)
-				optAlpha = optAlpha or defaultAlpha
-				initialValue = (1 - optAlpha) * initialValue + optAlpha * newValue
-				return value
+				defaultAlpha = optAlpha or defaultAlpha
+				initialValue = (1 - defaultAlpha) * initialValue + defaultAlpha * newValue
+				return initialValue
 			end
 		end,
 		---@endsection
@@ -349,7 +335,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		simpleCopy_SL = function(tableIn, tableOut, allowOverwrite)
 			tableOut = tableOut or {}
 			local disableOverwrite = not allowOverwrite
-			for key, copiedValue in pairs_SL(tableIn) do
+			for key, copiedValue in pairs(tableIn) do
 				tableOut[key] = disableOverwrite and tableOut[key] or copiedValue
 			end
 			return tableOut
@@ -367,9 +353,9 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 
 			recursive=function(nested_table, output_table)
 				tables_list[nested_table] = output_table
-				for key,copiedValue in pairs_SL(nested_table) do
-					key = (type_SL(key) == check) and (tables_list[key] or recursive(key, {}) ) or key
-					output_table[key] = (type_SL(copiedValue) == check) and (tables_list[copiedValue] or recursive(copiedValue, {}) ) or copiedValue
+				for key,copiedValue in pairs(nested_table) do
+					key = (type(key) == check) and (tables_list[key] or recursive(key, {}) ) or key
+					output_table[key] = (type(copiedValue) == check) and (tables_list[copiedValue] or recursive(copiedValue, {}) ) or copiedValue
 				end
 				return output_table
 			end
@@ -416,7 +402,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@endsection
 
 		---@section xoshiro256ss_SL
-		---Very large and pretty advanced pseudoRNG. Is only marginally better than 64 bit xorshift, so consider using that, but this guy also has extremely long period.
+		---Very large and pretty advanced pseudoRNG. Is only marginally better than 64 bit xorshift, so consider using that instead. This however has extremely long period.
 		---@param seed0 integer
 		---@param seed1 integer
 		---@param seed2 integer
@@ -446,22 +432,18 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param boundLow number? default to 0
 		---@param boundHigh number? default to 1
 		---@param integerMode boolean?
-		---@return fun(newSeed:integer?):number
+		---@return fun():number
 		createRngClosure_SL = function(seed, boundLow, boundHigh, integerMode)
 			seed = seed or 1
 			boundLow = boundLow or 0
 			boundHigh = boundHigh or 1
 
-			--4294967295 is 2^32-1, the maximum value of a 32 bit unsigned integer
-			local xorShiftSL, floor, mask = StormSL.xorShift64_SL, math.floor, 4294967295
-
-			return function(newSeed)
-				seed = xorShiftSL(newSeed or seed)
-				local x = ( (seed >> 16) & mask) / mask
-				if integerMode then
-					return floor(boundLow + x *(boundHigh - boundLow) + 0.5)
-				end
-				return boundLow + x * (boundHigh - boundLow)
+			local xorShift64_SL, floor, mask, x = StormSL.xorShift64_SL, math.floor, 0xFFFFFFFF
+			return function()
+				seed = xorShift64_SL(seed)
+				x = ( (seed >> 16) & mask) / mask
+				x = boundLow + x *(boundHigh - boundLow)
+				return integerMode and floor( x + 0.5) or x
 			end
 		end,
 		---@endsection
@@ -479,7 +461,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@param integerMode boolean? if true, will return integers, otherwise floats
 		---@return table
 		createRngClass_SL = function (seed, boundLow, boundHigh, integerMode)
-			local xorShiftSL, floor, mask = StormSL.xorShift64_SL, math.floor, 4294967295
+			local xorShiftSL, floor, mask, x = StormSL.xorShift64_SL, math.floor, 4294967295
 			return {
 				seed = seed or 1,
 				boundLow = boundLow or 0,
@@ -487,11 +469,9 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				integerMode = integerMode,
 				generate = function(self)
 					self.seed = xorShiftSL(self.seed)
-					local x = ( (self.seed >> 16) & mask) / mask
-					if self.integerMode then
-						return floor(self.boundLow + x *(self.boundHigh - self.boundLow) + 0.5)
-					end
-					return self.boundLow + x * (self.boundHigh - self.boundLow)
+					x = ( (self.seed >> 16) & mask) / mask
+					x = self.boundLow + x *(self.boundHigh - self.boundLow)
+					return self.integerMode and floor(x + 0.5) or x
 				end
 			}
 		end,
@@ -570,7 +550,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		stringToWordTable_SL = function(string)
 			local outputTable = {}
 			for word in string:gmatch('%g+') do
-				insert_SL(outputTable, word)
+				table.insert(outputTable, word)
 			end
 			return outputTable
 		end,
@@ -582,7 +562,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		---@return number
 		getAverage_SL=function(...)
 			local inputs, sum = {...}, 0
-			for key,value in ipairs_SL(inputs) do
+			for key,value in ipairs(inputs) do
 				sum = sum + value
 			end
 			return sum / #inputs
@@ -639,7 +619,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 					if n > 0 then
 						value = stack[n - position]
 						if remove then
-							remove_SL(stack, n - position)
+							table.remove(stack, n - position)
 							stack.n = n - 1
 						end
 					end
@@ -655,7 +635,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				---@param insert boolean?
 				write_SL = function(stack, position, value, insert)
 					if insert then
-						insert_SL(stack, stack._n - position, value)
+						table.insert(stack, stack._n - position, value)
 						stack._n = stack._n + 1
 					else
 						stack[stack._n - position] = value
@@ -707,7 +687,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				read_SL = function(position, remove)
 					local ret = stack[n - position]
 					if remove then
-						remove_SL(stack, n-position)
+						table.remove(stack, n-position)
 					end
 					return ret
 				end,
@@ -720,7 +700,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 				---@param insert boolean?
 				write_SL = function(position, value, insert)
 					if insert then
-						insert_SL(stack, n - position, value)
+						table.insert(stack, n - position, value)
 						n = n + 1
 					else
 						stack[n - position] = value
@@ -731,104 +711,6 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 		end,
 		---@endsection STORMSL_UPVALSTACK_CLASS
 
-		---@section createQueue_SL 1 STORMSL_QUEUE_CLASS
-		---Creates an object with functions referencing an upvalue queue in a FIFO manner, has to be used with method calls.
-		---@return table channel
-		createQueue_SL = function()
-			return {
-				_n = 0,
-				_position = 0,
-
-				---@section read_SL
-				---Reads the first entry from the queue
-				---@param queue table
-				---@return any value
-				read_SL = function(queue)
-					if queue._n > 0 then
-						local value = queue[queue._position]
-						queue[queue._position] = nil
-						queue._n = queue._n - 1
-						queue._position = queue._position + 1
-						return value
-					end
-				end,
-				---@endsection 
-
-				---@section write_SL
-				---Adds a new entry to the queue
-				---@param queue table
-				---@param value any
-				write_SL = function(queue, value)
-					queue[queue._n + queue._position] = value
-					queue._n = queue._n + 1
-				end,
-				---@endsection 
-
-				---@section getSize_SL
-				---Returns the amount of data stored in the queue
-				---@param queue table
-				---@return integer size
-				getSize_SL = function(queue)
-					return queue._n
-				end
-				---@endsection 
-			}
-		end,
-		---@endsection STORMSL_QUEUE_CLASS
-
-		---@section createQueueUval_SL 1 STORMSL_UPVALQUEUE_CLASS
-		---Creates a queue object in a FIFO manner, can't be used with method calls.
-		---@return table channel
-		createQueueUval_SL = function()
-			local queue, n, position = {}, 0, 0
-			return {
-				---@section read_SL
-				---Reads the first entry from the queue
-				---@return any value
-				read_SL = function()
-					if n > 0 then
-						local value = queue[position]
-						queue[position] = nil
-						n = n - 1
-						position = position + 1
-						return value
-					end
-				end,
-				---@endsection 
-
-				---@section write_SL
-				---Adds a new entry to the queue
-				---@param value any
-				write_SL = function(value)
-					queue[n + position] = value
-					n = n + 1
-				end,
-				---@endsection 
-
-				---@section getSize_SL
-				---Returns the amount of data stored in the queue
-				---@return integer size
-				getSize_SL = function()
-					return n
-				end
-				---@endsection 
-			}
-		end,
-		---@endsection STORMSL_UPVALQUEUE_CLASS
-
-		---@section printIntRepresentation_SL
-		---Prints a binary representation of an integer
-		---@param integer integer
-		---@param ... any
-		printIntRepresentation_SL = function(integer, ...)
-			local text = ''
-			for i = 0, 63 do
-				text=( (integer >> i) & 1) .. text
-			end
-			print(text, ...)
-		end,
-		---@endsection
-
 	}
 
 	--again using upvalues for internal speedups as those end up being upvalues
@@ -838,6 +720,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	require('Modules.Bitformatting')
 	require('Modules.Control')
 	require('Modules.Anim')
+	require('Modules.Compression')
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table
