@@ -63,4 +63,5 @@ Debug = {
 	---@endsection
 
 }
+StormSL.Debug = Debug
 ---@endsection STORMSL_DEBUG_CLASS

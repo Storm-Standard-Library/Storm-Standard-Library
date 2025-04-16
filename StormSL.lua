@@ -1,6 +1,6 @@
 ---@section StormSL 1 _STORM_SL_CLASS_
 do	--hides the upvalues so that there's no chance of name conflict for locals below
-	local Vectors, Matrices, Bitformatting, Control, Anim, Compression
+	local Vectors, Matrices, Bitformatting, Control, Anim, Compression, Debug
 
 	--it's declared as a global so that it can be accessed from anywhere in the script, always
 	---@class StormSL
@@ -46,9 +46,11 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	---@field cache_SL table
 	---@field Vectors Vectors Standard Stormworks Vector functions
 	---@field Matrices Matrices Standard Stormworks matrix functions
-	---@field Bitformatting Bitformatting Encoding and decoding between numbers of different sizes, tables [, and strings]
+	---@field Bitformatting Bitformatting Encoding and decoding between numbers of different sizes, [tables , and strings]
 	---@field Control Control Essential Stormworks feedback control algorithms.
 	---@field Anim Anim Simple, useful, animation related functions.
+	---@field Compression Compression Used to encode tables into bytes to prepare it for transmission or storage
+	---@field Debug Debug Prints to console internal representations of various datatypes and allows for profiling and timing execution times
 	---The Storm standard library for Stormworks Lua.
 	StormSL = {
 
@@ -721,6 +723,7 @@ do	--hides the upvalues so that there's no chance of name conflict for locals be
 	require('Modules.Control')
 	require('Modules.Anim')
 	require('Modules.Compression')
+	require('Modules.Debug')
 end
 --speeds up every access while in game as it's an upvalue of both onTick and onDraw
 --it's declared after global declaration so that there is also a reference in the _ENV table
