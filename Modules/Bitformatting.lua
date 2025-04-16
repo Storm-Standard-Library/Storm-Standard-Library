@@ -1,12 +1,5 @@
 
----@section __LB_SIMULATOR_ONLY_STORMSL_BITFORMATTING_START__
-do
-local StormSL,ipairs_SL,pairs_SL,insert_SL,remove_SL,type_SL,unpack_SL,Bitformatting=StormSL,ipairs,pairs,table.insert,table.remove,type,table.unpack
----@endsection
-
-
-
----@section Bitformatting 1 STORMSL_BITFORMATTING_CLASS
+---@section Bitformatting 2 STORMSL_BITFORMATTING_CLASS
 ---@class Bitformatting
 ---@field uint32ToChannel_SL fun(channel:integer,uint32:integer):nil
 ---@field channelToUint32_SL fun(channel:integer):integer
@@ -76,6 +69,7 @@ Bitformatting = {
 		local uint32 = ( ('I'):unpack( ('f'):pack(input.getNumber(channel)) ) ) | (input.getBool(channel) and 0x800000 or 0)
 		return uint32 & 255, (uint32 >> 8) & 255,  (uint32 >> 16) & 255,  (uint32 >> 24) & 255
 	end,
+	---@endsection
 
 	---@section floatToInt_SL
 	---Has subnormals but deliberately skips infs and nans, variable shift and exp bits, can toggle off sign bit or use enforce classic conversion. Check source and comments for notable bit sizes.
@@ -127,7 +121,7 @@ Bitformatting = {
 			any size mentioned here -1 has one less bit for exponent with the same mantissa, having same precision but decreased range
 			43 and above defaults to 11 bit exp using lua double format (truncated mantissa)
 		]]
-		local expBits,mantissa,floor,clamp,mantissaBits,maxMantissa,expLow,expHigh,expShift,expRepresentation,expValue,int=custom_exponentBits or bits==24 and 8 or (3+bits//6),math.abs(float),math.floor,StormSL.clampS_SL
+		local expBits,mantissa,floor,clamp,mantissaBits,maxMantissa,expLow,expHigh,expShift,expRepresentation,expValue,int=custom_exponentBits or bits==24 and 8 or (3+bits//6),math.abs(float),math.floor,StormSL.clamp_SL
 		if not custom_disableDouble and bits>42 or custom_forceDouble then
 			--is normal double but truncated mantissa
 			return ('i8'):unpack( ('d'):pack(float) ) >> clamp(0, 64, 64 - bits)
@@ -223,9 +217,9 @@ Bitformatting = {
 	---@return table 
 	fixedTableEncode_SL = function(int, bits, count, outputTable)
 		local t, mask, size = outputTable or {}, 2 ^ bits - 1
-		size = #t
-		for i = size, size + count - 1 do
-			t[i + 1] = ( int >> (bits * i) ) & mask
+		size = #t + 1
+		for i = 0, count - 1 do
+			t[size + i] = ( int >> (bits * i) ) & mask
 		end
 		return t
 	end,
@@ -331,25 +325,25 @@ Bitformatting = {
 	---@param index integer? defaults to 1, can be used to skip a header or smfn
 	---@return table transcribed into different bit size
 	transcribeTableBits_SL=function(tab,bitsIn,bitsOut,totalOutputValues,index)
-		local output, buffer, shift, topValue = {}, 0, 0
+		local output, buffer, shift, insertLocal, removeLocal topValue = {}, 0, 0, table.insert, table.remove
 		index = index or 1
 
-		for i, value in ipairs_SL(tab), tab, index - 1 do
+		for i, value in ipairs(tab), tab, index - 1 do
 			buffer = (buffer << bitsIn) | value
 			shift = shift + bitsIn
 			while shift >= bitsOut do
 				topValue = buffer >> (shift - bitsOut)
-				insert_SL(output, topValue)
+				insertLocal(output, topValue)
 				buffer = buffer ~ (topValue << (shift - bitsOut))
 				shift = shift - bitsOut
 			end
 		end
 		while shift > 0 do
-			insert_SL(output, buffer >> (shift - bitsOut))
+			insertLocal(output, buffer >> (shift - bitsOut))
 			shift = shift - bitsOut
 		end
 		for i = (totalOutputValues or math.huge) + 1, #output, -1 do
-			remove_SL(output, i)
+			removeLocal(output, i)
 		end
 		return output
 	end,
@@ -358,10 +352,3 @@ Bitformatting = {
 
 StormSL.Bitformatting = Bitformatting
 ---@endsection STORMSL_BITFORMATTING_CLASS
-
-
-
-
----@section __LB_SIMULATOR_ONLY_STORMSL_BITFORMATTING_END__
-end
----@endsection

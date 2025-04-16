@@ -1,4 +1,4 @@
----@section Anim 1 STORMSL_ANIM_CLASS
+---@section Anim 2 STORMSL_ANIM_CLASS
 ---@class Anim
 ---@field animator_SL fun(duration: number, start: number, finish: number, easingFn: fun(progress: number): number): fun(driveForward: boolean, ticksPassed: integer?): number
 ---@field driver_SL fun(ticksDuration: integer): fun(driveForward: boolean, ticksPassed: integer?): number
