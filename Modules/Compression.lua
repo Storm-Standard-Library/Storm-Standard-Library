@@ -60,7 +60,7 @@ Compression = {
 				cyclics[tab] = cyclicCounter
 			end
 
-			local encodeInt,insertLocal, typeLocal, absLocal, logLocal = BitFormatting.fixedTableEncode_SL, table.insert, type, math.abs, math.log
+			local encodeInt,insertLocal, typeLocal, absLocal, logLocal = Bitformatting.fixedTableEncode_SL, table.insert, type, math.abs, math.log
 			local numberType, tableType, stringType, booleanType = 'number', 'table', 'string', 'boolean'
 			local buffer, accessedArrayKeys, countOfHeaders, index, value, count, type, size, nextType, nextSize, checkType, encodeValues = {}, {}, 0, 1, tab[1]
 
@@ -100,7 +100,7 @@ Compression = {
 						--	insertLocal(buffer, (value >> (8 * j) ) & 255)
 						--end
 					elseif type == 1 then
-						value = BitFormatting.floatToInt_SL(value, 8 * size)
+						value = Bitformatting.floatToInt_SL(value, 8 * size)
 						encodeInt(value, 8, size, buffer)
 						--for j = 0, size - 1 do
 						--	insertLocal(buffer, (value >> (8 * j) ) & 255)
@@ -128,10 +128,10 @@ Compression = {
 						end
 					elseif type == 3 then
 						if cyclics[value] then
-							--BitFormatting.variableTableEncode_SL(cyclics[value], 8, buffer)
+							--Bitformatting.variableTableEncode_SL(cyclics[value], 8, buffer)
 							encodeInt(cyclics[value], 8, 2, buffer)
 						else
-							--BitFormatting.fixedTableEncode_SL(0, 8, 2, buffer)
+							--Bitformatting.fixedTableEncode_SL(0, 8, 2, buffer)
 							insertLocal(buffer, 0)
 							insertLocal(buffer, 0)
 							recursive(value, buffer)
@@ -160,7 +160,7 @@ Compression = {
 				countOfHeaders = countOfHeaders + 1
 				value = tab[index]
 			end
-			--BitFormatting.variableTableEncode_SL(countOfHeaders, 8, outTable)
+			--Bitformatting.variableTableEncode_SL(countOfHeaders, 8, outTable)
 			encodeInt(countOfHeaders, 8, 2, outTable)
 			table.move(buffer, 1, #buffer, #outTable + 1, outTable)
 			errorDetected = errorDetected or countOfHeaders>0xFFFF and 'header overflow, too many entries'
@@ -176,7 +176,7 @@ Compression = {
 					countOfHeaders = countOfHeaders + 1
 				end
 			end
-			--BitFormatting.variableTableEncode_SL(countOfHeaders, 8, outTable)
+			--Bitformatting.variableTableEncode_SL(countOfHeaders, 8, outTable)
 			encodeInt(countOfHeaders, 8, 2, outTable)
 			table.move(buffer, 1, #buffer, #outTable + 1, outTable)
 			errorDetected = errorDetected or countOfHeaders>0xFFFF and 'header overflow, too many entries'
@@ -197,7 +197,7 @@ Compression = {
 			end
 		end
 
-		local cyclics, stringCache, stringCounter, index, insertLocal, decodeInt = {}, {}, 0, #Compression.marker+1, table.insert, BitFormatting.fixedTableDecode_SL
+		local cyclics, stringCache, stringCounter, index, insertLocal, decodeInt = {}, {}, 0, #Compression.marker+1, table.insert, Bitformatting.fixedTableDecode_SL
 
 		local function recursive(outputTab)
 			insertLocal(cyclics, outputTab)
